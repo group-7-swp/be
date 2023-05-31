@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Repository.CategoryRepository;
 import com.example.demo.model.Category;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +12,25 @@ import java.util.List;
 @RequestMapping("/api/category")
 public class CategoryController {
 
-    @GetMapping("")
+    @GetMapping("/allCategory")
     public ResponseEntity<Object> getAllCategory() throws Exception {
         List<Category> categoryList = CategoryRepository.getAllCategory();
-        return ResponseEntity.ok().body(categoryList);
+        if (categoryList.size() != 0) {
+            return ResponseEntity.ok().body(categoryList);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
+
+    //Search category by name
+    @GetMapping("/searchById")
+    public ResponseEntity<Object> searchById(@RequestParam int categoryId) throws Exception {
+        Category category = CategoryRepository.getCategoryById(categoryId);
+        if (category.getCategoryId() != 0) {
+            return ResponseEntity.ok().body(category);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

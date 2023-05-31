@@ -2,6 +2,8 @@ package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Category;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +25,29 @@ public class CategoryRepository {
                     category.setCategoryId(table.getInt("categoryId"));
                     category.setCategoryName(table.getString("categoryName"));
                     categoryList.add(category);
-                }}
-            } return categoryList;
-        }
+                }
+            }
+        } return categoryList;
     }
+
+    //Get all category
+    public static Category getCategoryById(int categoryId) throws Exception {
+        Category category = new Category();
+        Connection cn = DBUtils.makeConnection();
+        if (cn!= null) {
+            String sql = "select * from dbo.Category where categoryId = ? ";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1,categoryId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    category.setCategoryId(table.getInt("categoryId"));
+                    category.setCategoryName(table.getString("categoryName"));
+                    }
+                }
+            }
+            return category;
+        }
+}
+
+
