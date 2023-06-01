@@ -2,6 +2,7 @@ package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.User;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,4 +55,20 @@ public class UserRepository {
         return user;
     }
 
+    public static ResponseEntity<String> createUser(User user) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "INSERT INTO Users (userRole, userName, userUid, email, phoneNumber, note)"
+                    + "VALUES(0, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, user.getUserName());
+            pst.setString(2, user.getUserUid());
+            pst.setString(3, user.getEmail());
+            pst.setInt(4, user.getPhoneNumber());
+            pst.setString(5, user.getNote());
+            int row = pst.executeUpdate();
+            if (row > 0) return ResponseEntity.ok().body("Create successfully");
+        }
+        return ResponseEntity.badRequest().body("Create fail");
+    }
 }
