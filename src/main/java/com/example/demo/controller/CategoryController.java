@@ -23,7 +23,7 @@ public class CategoryController {
         }
     }
 
-    //Search category by name
+    //
     @GetMapping("/searchById")
     public ResponseEntity<Object> searchById(@RequestParam int categoryId) throws Exception {
         Category category = CategoryRepository.getCategoryById(categoryId);
@@ -34,6 +34,7 @@ public class CategoryController {
         }
     }
 
+    //
     @GetMapping("/getCategoryAndProduct")
     public ResponseEntity<Object> getCategoryAndProduct() throws Exception {
         List<CategoryAndProduct> categoryAndProductList = CategoryRepository.getCategoryAndProduct();
