@@ -30,8 +30,8 @@ public class ProductRepository {
                     product.setStatus(table.getString("status"));
                     product.setDescription(table.getString("description"));
                     product.setImage(table.getString("image"));
-                    product.setCreateDate(table.getDate("dateCreate"));
-                    product.setUpdateDate(table.getDate("dateUpdate"));
+                    product.setDateCreate(table.getDate("dateCreate"));
+                    product.setDateUpdate(table.getDate("dateUpdate"));
                     productList.add(product);
                 }
             }
