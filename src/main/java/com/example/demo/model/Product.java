@@ -20,5 +20,6 @@ public class Product {
     private String status;
     private String description;
     private String image;
-    private Date createDate;
+    private Date dateCreate;
+    private Date dateUpdate;
 }
