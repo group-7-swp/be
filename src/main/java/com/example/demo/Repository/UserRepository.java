@@ -30,4 +30,28 @@ public class UserRepository {
         }
         return user;
     }
+
+    public static User getUserByUserUid(String userUid) throws Exception {
+        User user = new User();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql ="select * from dbo.Users where userUid = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, userUid);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    user.setUserId(table.getInt("userId"));
+                    user.setUserRole(table.getInt("userRole"));
+                    user.setUserName(table.getString("userName"));
+                    user.setUserUid(table.getString("userUid"));
+                    user.setEmail(table.getString("email"));
+                    user.setPhoneNumber(table.getInt("phoneNumber"));
+                    user.setNote(table.getString("note"));
+                }
+            }
+        }
+        return user;
+    }
+
 }

@@ -20,4 +20,14 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/getUserByUserUid")
+    public ResponseEntity<Object> getUserByUserUid(@RequestParam String userUid) throws Exception {
+        User user = UserRepository.getUserByUserUid(userUid);
+        if (user.getUserUid() != null) {
+            return ResponseEntity.ok().body(user);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
