@@ -32,7 +32,6 @@ public class CategoryRepository {
         } return categoryList;
     }
 
-
     public static Category getCategoryById(int categoryId) throws Exception {
         Category category = new Category();
         Connection cn = DBUtils.makeConnection();
@@ -126,7 +125,8 @@ public class CategoryRepository {
                         product.setStatus(table.getString("status"));
                         product.setDescription(table.getString("description"));
                         product.setImage(table.getString("image"));
-                        product.setCreateDate(table.getDate("dateCreate"));
+                        product.setDateCreate(table.getDate("dateCreate"));
+                        product.setDateUpdate(table.getDate("dateUpdate"));
                         productList.add(product);
                     }
                 }

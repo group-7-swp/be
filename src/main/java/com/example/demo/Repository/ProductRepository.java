@@ -71,66 +71,6 @@ public class ProductRepository {
         return productList;
     }
 
-    //Filter product by it's category
-    //Đã tích hợp trong multiFilter
-    public static List<Product> filterByCategory(String categoryId) throws Exception {
-        String sql = "select * from dbo.Product where categoryId = '" + categoryId + "'";
-        List<Product> productList = getProduct(sql);
-        return productList;
-    }
-
-    //Filter product by price from x to y
-    //Đã tích hợp trong multiFilter
-    public static List<Product> sortByPrice(int from, int to) throws Exception {
-        String sql = "Select * from dbo.Product where price >= " + from + " and price <= " + to;
-        List<Product> productList = getProduct(sql);
-        return productList;
-    }
-
-    //Filter product by status
-    //Đã tích hợp trong multiFilter
-    public static List<Product> filterByStatus(String status) throws Exception {
-        String sql = "Select * from dbo.Product where status = N'" + status + "'";
-        List<Product> productList = getProduct(sql);
-        return productList;
-    }
-
-    //Get product quantity
-    public static int getQuantity(int productId) throws Exception {
-        String sql = "Select * from dbo.Product where productId = ?";
-        int quantity = 0;
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, productId);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                table.next();
-                quantity = table.getInt("quantity");
-            }
-        }
-        return quantity;
-    }
-
-    //Update new quantity when customer purchase product
-    public static ResponseEntity<String> updateQuantity(int buyQuantity, int productId) throws Exception {
-        int oldQuantity = getQuantity(productId);
-        int newQuantity = oldQuantity - buyQuantity;
-        String sql = "UPDATE dbo.Product SET quantity = " + newQuantity + ", status = '' WHERE productId = '" + productId + "'";
-        if (newQuantity == 0) {
-            sql = "UPDATE dbo.Product SET quantity = 0, status = N'hết hàng' WHERE productId = '" + productId + "'";
-        }
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            PreparedStatement pst = cn.prepareStatement(sql);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Update successful");
-            }
-        }
-        return ResponseEntity.badRequest().body("Failed");
-    }
-
     //Add new product
     public static ResponseEntity<String> createProduct(Product product) throws Exception {
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -142,10 +82,6 @@ public class ProductRepository {
                     "INSERT INTO Product(productName, price, quantity, categoryId, status, description, image, dateCreate) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                     "SET ANSI_WARNINGS ON";
-            /*String sql = "SET ANSI_WARNINGS OFF;" +
-                    "INSERT INTO Product(productName, price, quantity, categoryId, status, description, image, dateCreate) " +
-                    "VALUES (N'" + productName + "', " + price + ", " + quantity + ", " + categoryId + ", N'" + status + "', N'" + description + "', '" + image + "', '" + createDate + "') " +
-                    "SET ANSI_WARNINGS ON;";*/
 
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setString(1, product.getProductName());
