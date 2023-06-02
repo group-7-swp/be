@@ -71,4 +71,31 @@ public class UserRepository {
         }
         return ResponseEntity.badRequest().body("Create fail");
     }
+
+    public static void updateUser(User user) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "update Users set userName = ?, email = ?, phoneNumber = ?, note = ? WHERE userId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, user.getUserName());
+            pst.setString(2, user.getEmail());
+            pst.setInt(3, user.getPhoneNumber());
+            pst.setString(4, user.getNote());
+            pst.executeUpdate();
+        }
+    }
+
+    public static void deleteUser(int userId) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Delete from Users where userId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, userId);
+            pst.executeUpdate();
+        }
+    }
+
+
+
+
 }
