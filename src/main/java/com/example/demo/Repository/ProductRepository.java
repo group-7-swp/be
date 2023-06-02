@@ -104,7 +104,7 @@ public class ProductRepository {
             }
 
         }
-        
+
         if (status!=null) sql = sql + " status = N'" + status + "'";
         int lenght = sql.length();
         if (sql.substring(lenght-5,lenght-1).trim().equals("and")) sql = sql.substring(0, lenght-5);
@@ -112,11 +112,33 @@ public class ProductRepository {
         return productList;
     }
 
+    //Filter product by it's category
+    //Đã tích hợp trong multiFilter
+    public static List<Product> filterByCategory(String categoryId) throws Exception {
+        String sql = "select * from dbo.Product where categoryId = '" + categoryId + "'";
+        List<Product> productList = getProduct(sql);
+        return productList;
+    }
+
+    //Filter product by price from x to y
+    //Đã tích hợp trong multiFilter
+    public static List<Product> sortByPrice(int from, int to) throws Exception {
+        String sql = "Select * from dbo.Product where price >= " + from + " and price <= " + to;
+        List<Product> productList = getProduct(sql);
+        return productList;
+    }
+
+    //Filter product by status
+    //Đã tích hợp trong multiFilter
+    public static List<Product> filterByStatus(String status) throws Exception {
+        String sql = "Select * from dbo.Product where status = N'" + status + "'";
+        List<Product> productList = getProduct(sql);
+        return productList;
+    }
+
     //Add new product
     public static ResponseEntity<String> createProduct(Product product) throws Exception {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        String dateCreate = date.format(now);
+        String dateCreate = DBUtils.getCurrentDate();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
             String sql = "SET ANSI_WARNINGS OFF;" +
@@ -159,9 +181,7 @@ public class ProductRepository {
 
     //Update existing product by id
     public static ResponseEntity<String> updateProduct(Product product) throws Exception {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        String dateUpdate = date.format(now);
+        String dateUpdate = DBUtils.getCurrentDate();
 
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {

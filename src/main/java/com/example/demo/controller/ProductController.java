@@ -30,6 +30,24 @@ public class ProductController {
         return ResponseEntity.ok().body(productList.get(0));
     }
 
+    @GetMapping("/filterByCategory")
+    public ResponseEntity<Object> filterByCategory(@Parameter String categoryId) throws Exception {
+        List<Product> productList = ProductRepository.filterByCategory(categoryId);
+        return ResponseEntity.ok().body(productList);
+    }
+
+    @GetMapping("/filterByPrice")
+    public ResponseEntity<Object> filterByPrice(@Parameter int from, int to) throws Exception {
+        List<Product> productList = ProductRepository.sortByPrice(from, to);
+        return ResponseEntity.ok().body(productList);
+    }
+
+    @GetMapping("/filterByStatus")
+    public ResponseEntity<Object> filterByStatus(@Parameter String status) throws Exception {
+        List<Product> productList = ProductRepository.filterByStatus(status);
+        return ResponseEntity.ok().body(productList);
+    }
+
     @GetMapping("/multiFilter")
     public ResponseEntity<Object> multiFilter(@RequestParam(required = false) String categoryName, String price, String status) throws Exception {
         List<Product> productList = ProductRepository.multiFilter(categoryName, price, status);
@@ -41,12 +59,12 @@ public class ProductController {
         return ProductRepository.createProduct(product);
     }
 
-    @PostMapping("/deleteProduct")
+    @DeleteMapping("/deleteProduct")
     public ResponseEntity<String>  deleteProduct(@RequestParam int productId) throws Exception {
         return ProductRepository.deleteProduct(productId);
     }
 
-    @PostMapping("/updateProduct")
+    @PatchMapping("/updateProduct")
     public ResponseEntity<String>  updateProduct(@RequestBody Product product) throws Exception {
         return ProductRepository.updateProduct(product);
     }
