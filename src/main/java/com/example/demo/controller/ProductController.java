@@ -50,4 +50,10 @@ public class ProductController {
     public ResponseEntity<String>  updateProduct(@RequestBody Product product) throws Exception {
         return ProductRepository.updateProduct(product);
     }
+
+    @GetMapping("/filterByCategory")
+    public ResponseEntity<Object> getProductByCategoryId(@RequestParam int categoryId) throws Exception {
+        List<Product> productList = ProductRepository.filterByCategoryId(categoryId);
+        return ResponseEntity.ok().body(productList);
+    }
 }

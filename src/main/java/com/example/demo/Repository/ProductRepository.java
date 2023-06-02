@@ -183,4 +183,10 @@ public class ProductRepository {
         }
         return ResponseEntity.badRequest().body("Failed");
     }
+
+    public static List<Product> filterByCategoryId(int categoryId) throws Exception {
+        String sql = "select * from dbo.Product where categoryId = " + categoryId;
+        List<Product> productList = getProduct(sql);
+        return productList;
+    }
 }
