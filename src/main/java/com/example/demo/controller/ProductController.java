@@ -25,14 +25,14 @@ public class ProductController {
     }
 
     @GetMapping("/getProductById")
-    public ResponseEntity<Object> getProductById(@RequestParam String productId) throws Exception {
+    public ResponseEntity<Object> getProductById(@RequestParam int productId) throws Exception {
         List<Product> productList = ProductRepository.getProductById(productId);
-        return ResponseEntity.ok().body(productList);
+        return ResponseEntity.ok().body(productList.get(0));
     }
 
     @GetMapping("/multiFilter")
-    public ResponseEntity<Object> multiFilter(@RequestParam boolean category, boolean price, int categoryId, int from, int to, String status) throws Exception {
-        List<Product> productList = ProductRepository.multiFilter(category, price, categoryId, from, to, status);
+    public ResponseEntity<Object> multiFilter(@RequestParam(required = false) String categoryName, String price, String status) throws Exception {
+        List<Product> productList = ProductRepository.multiFilter(categoryName, price, status);
         return ResponseEntity.ok().body(productList);
     }
 
