@@ -19,13 +19,13 @@ public class OrderController {
     }
 
     @GetMapping("/getOrderById")
-    public ResponseEntity<Object> getOrderById(int orderId) throws Exception {
-        List<Order> orderList = OrderRepository.getOrderById(orderId);
+    public ResponseEntity<Object> getOrderById(int orderItemId) throws Exception {
+        List<Order> orderList = OrderRepository.getOrderById(orderItemId);
         return ResponseEntity.ok().body(orderList);
     }
     @DeleteMapping("/deleteOrder")
-    public ResponseEntity<String> deleteOrder(@RequestParam int orderId) throws Exception {
-        return OrderRepository.deleteOrder(orderId);
+    public ResponseEntity<String> deleteOrder(@RequestParam int orderItemId) throws Exception {
+        return OrderRepository.deleteOrder(orderItemId);
     }
 
     @PostMapping("/createOrder")

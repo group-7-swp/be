@@ -23,6 +23,7 @@ public class OrderItemRepository {
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
+                    orderItem.setOrderId(table.getInt("orderItemId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -35,17 +36,18 @@ public class OrderItemRepository {
     }
 
     //Get Order by Id
-    public static List<OrderItem> getOrderItemById(int orderId) throws Exception {
+    public static List<OrderItem> getOrderItemById(int orderItemId) throws Exception {
         List<OrderItem> orderItemList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "Select * from dbo.OrderItems where orderId = ?";
+            String sql = "Select * from dbo.OrderItems where orderItemId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, orderId);
+            pst.setInt(1, orderItemId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
+                    orderItem.setOrderId(table.getInt("orderItemId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -57,6 +59,30 @@ public class OrderItemRepository {
         return orderItemList;
     }
 
+    public static List<OrderItem> getOrderItemByOrderId(int orderId) throws Exception {
+        List<OrderItem> orderItemList = new ArrayList<>();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Select * from dbo.OrderItems where orderId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, orderId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setOrderId(table.getInt("orderItemId"));
+                    orderItem.setOrderId(table.getInt("orderId"));
+                    orderItem.setProductId(table.getInt("productId"));
+                    orderItem.setQuantity(table.getInt("quantity"));
+                    orderItem.setTotalPrice(table.getInt("totalPrice"));
+                    orderItemList.add(orderItem);
+                }
+            }
+        }
+        return orderItemList;
+    }
+
+    //ko quan trọng
     public static List<OrderItem> getOrderItemByIdAndProductId(int orderId, int productId) throws Exception {
         List<OrderItem> orderItemList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
