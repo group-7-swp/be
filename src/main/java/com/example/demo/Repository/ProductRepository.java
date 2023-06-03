@@ -133,7 +133,6 @@ public class ProductRepository {
             pst.setString(6, product.getDescription());
             pst.setString(7, product.getImage());
             pst.setString(8, dateCreate);
-
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");

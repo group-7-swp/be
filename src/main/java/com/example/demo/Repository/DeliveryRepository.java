@@ -41,7 +41,19 @@ public class DeliveryRepository {
         return ResponseEntity.badRequest().body("Create fail");
     }
 
-
-
+    public static ResponseEntity<String> deleteDelivery(int deliveryId, String address) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Delete from Delivery where deliveryId = ? AND address = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, deliveryId);
+            pst.setString(2, address);
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Delete successful");
+            }
+        }
+        return ResponseEntity.badRequest().body("Delete failed");
+    }
 
 }

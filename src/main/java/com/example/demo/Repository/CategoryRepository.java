@@ -59,7 +59,6 @@ public class CategoryRepository {
             PreparedStatement pst = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, categoryName);
             int affectedRows = pst.executeUpdate();
-
             if (affectedRows > 0) {
                 ResultSet generatedKeys = pst.getGeneratedKeys();
                 if (generatedKeys.next()) {
@@ -72,15 +71,19 @@ public class CategoryRepository {
     }
 
     //Update Category
-    public static void updateCategory(Category category) throws Exception {
+    public static ResponseEntity<String> updateCategory(Category category) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
             String sql = "Update dbo.Category Set categoryName = ? WHERE categoryId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setString(1, category.getCategoryName());
             pst.setInt(2, category.getCategoryId());
-            pst.executeUpdate();
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Update Successfully");
+            }
         }
+                return ResponseEntity.badRequest().body("Update Fail");
     }
 
     //Delete Category
