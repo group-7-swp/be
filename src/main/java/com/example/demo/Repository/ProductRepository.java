@@ -155,7 +155,6 @@ public class ProductRepository {
             pst.setString(6, product.getDescription());
             pst.setString(7, product.getImage());
             pst.setString(8, dateCreate);
-
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");
@@ -202,5 +201,11 @@ public class ProductRepository {
             }
         }
         return ResponseEntity.badRequest().body("Failed");
+    }
+
+    public static List<Product> filterByCategoryId(int categoryId) throws Exception {
+        String sql = "select * from dbo.Product where categoryId = " + categoryId;
+        List<Product> productList = getProduct(sql);
+        return productList;
     }
 }

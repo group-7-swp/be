@@ -16,5 +16,5 @@ public class CartItems {
     private int cartId;
     private int productId;
     private int quantity;
-    private int totalPrice;
+    private double totalPrice;
 }
