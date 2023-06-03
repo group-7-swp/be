@@ -30,12 +30,6 @@ public class ProductController {
         return ResponseEntity.ok().body(productList.get(0));
     }
 
-    @GetMapping("/filterByCategory")
-    public ResponseEntity<Object> filterByCategory(@Parameter String categoryId) throws Exception {
-        List<Product> productList = ProductRepository.filterByCategory(categoryId);
-        return ResponseEntity.ok().body(productList);
-    }
-
     @GetMapping("/filterByPrice")
     public ResponseEntity<Object> filterByPrice(@Parameter int from, int to) throws Exception {
         List<Product> productList = ProductRepository.sortByPrice(from, to);

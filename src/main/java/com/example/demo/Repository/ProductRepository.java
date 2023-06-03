@@ -114,8 +114,8 @@ public class ProductRepository {
 
     //Filter product by it's category
     //Đã tích hợp trong multiFilter
-    public static List<Product> filterByCategory(String categoryId) throws Exception {
-        String sql = "select * from dbo.Product where categoryId = '" + categoryId + "'";
+    public static List<Product> filterByCategoryId(int categoryId) throws Exception {
+        String sql = "select * from dbo.Product where categoryId = " + categoryId;
         List<Product> productList = getProduct(sql);
         return productList;
     }
@@ -201,11 +201,5 @@ public class ProductRepository {
             }
         }
         return ResponseEntity.badRequest().body("Failed");
-    }
-
-    public static List<Product> filterByCategoryId(int categoryId) throws Exception {
-        String sql = "select * from dbo.Product where categoryId = " + categoryId;
-        List<Product> productList = getProduct(sql);
-        return productList;
     }
 }
