@@ -24,7 +24,7 @@ public class UserRepository {
                     user.setUserName(table.getString("userName"));
                     user.setUserUid(table.getString("userUid"));
                     user.setEmail(table.getString("email"));
-                    user.setPhoneNumber(table.getInt("phoneNumber"));
+                    user.setPhoneNumber(table.getString("phoneNumber"));
                     user.setNote(table.getString("note"));
                 }
             }
@@ -47,7 +47,7 @@ public class UserRepository {
                     user.setUserName(table.getString("userName"));
                     user.setUserUid(table.getString("userUid"));
                     user.setEmail(table.getString("email"));
-                    user.setPhoneNumber(table.getInt("phoneNumber"));
+                    user.setPhoneNumber(table.getString("phoneNumber"));
                     user.setNote(table.getString("note"));
                 }
             }
@@ -64,7 +64,7 @@ public class UserRepository {
             pst.setString(1, user.getUserName());
             pst.setString(2, user.getUserUid());
             pst.setString(3, user.getEmail());
-            pst.setInt(4, user.getPhoneNumber());
+            pst.setString(4, user.getPhoneNumber());
             pst.setString(5, user.getNote());
             int row = pst.executeUpdate();
             if (row > 0) return ResponseEntity.ok().body("Create successfully");
@@ -79,7 +79,7 @@ public class UserRepository {
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setString(1, user.getUserName());
             pst.setString(2, user.getEmail());
-            pst.setInt(3, user.getPhoneNumber());
+            pst.setString(3, user.getPhoneNumber());
             pst.setString(4, user.getNote());
             pst.executeUpdate();
         }
