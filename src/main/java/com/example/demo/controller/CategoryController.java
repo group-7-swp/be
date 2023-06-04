@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Repository.CategoryRepository;
+import com.example.demo.Repository.ProductRepository;
 import com.example.demo.model.Category;
 import com.example.demo.model.CategoryAndProduct;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class CategoryController {
     }
 
     //
-    @GetMapping("/searchById")
-    public ResponseEntity<Object> searchById(@RequestParam int categoryId) throws Exception {
+    @GetMapping("/searchCategoryById")
+    public ResponseEntity<Object> searchCategoryById(@RequestParam int categoryId) throws Exception {
         Category category = CategoryRepository.getCategoryById(categoryId);
         if (category.getCategoryId() != 0) {
             return ResponseEntity.ok().body(category);

@@ -24,8 +24,8 @@ public class AddressController {
     }
 
     @PostMapping("/createAddress")
-    public ResponseEntity<String> createAddress(@RequestBody Address adress) throws Exception {
-        return AddressRepository.createAddress(adress);
+    public ResponseEntity<String> createAddress(@RequestBody Address address) throws Exception {
+        return AddressRepository.createAddress(address);
     }
 
     @DeleteMapping("/deleteAddress")
@@ -34,7 +34,7 @@ public class AddressController {
     }
 
     @PatchMapping("/updateAddress")
-    public ResponseEntity<String> updateAddress(@RequestBody Address adress) throws Exception {
-        return AddressRepository.updateAddress(adress);
+    public ResponseEntity<String> updateAddress(@RequestBody Address address) throws Exception {
+        return AddressRepository.updateAddress(address);
     }
 }

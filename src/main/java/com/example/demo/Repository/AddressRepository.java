@@ -54,7 +54,7 @@ public class AddressRepository {
         return address;
     }
 
-    //Create new Category
+    //Create new Address
     public static ResponseEntity<String> createAddress(Address address) throws Exception {
         Address category = new Address();
         Connection cn = DBUtils.makeConnection();
@@ -65,7 +65,6 @@ public class AddressRepository {
             pst.setString(2, address.getAddress());
             pst.setString(3, DBUtils.getCurrentDate());
             int row = pst.executeUpdate();
-
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");
             }
@@ -73,7 +72,7 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-    //Update Category
+    //Update Address
     public static ResponseEntity<String> updateAddress(Address address) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -92,7 +91,7 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-    //Delete Category
+    //Delete Address
     public static ResponseEntity<String> deleteAddress(int addressId) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn!= null) {

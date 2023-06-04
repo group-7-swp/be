@@ -51,24 +51,27 @@ public class CategoryRepository {
     }
 
     //Create new Category
-    public static Category createCategory(String categoryName) throws Exception {
-        Category category = new Category();
+    public static ResponseEntity<String> createCategory(Category category) throws Exception {
+        String dateCreate = DBUtils.getCurrentDate();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO dbo.Category (categoryName) VALUES (?)";
-            PreparedStatement pst = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, categoryName);
-            int affectedRows = pst.executeUpdate();
-            if (affectedRows > 0) {
-                ResultSet generatedKeys = pst.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int categoryId = generatedKeys.getInt(1);
-                    category.setCategoryId(categoryId);
-                    category.setCategoryName(categoryName);
-                }
+            String sql = "SET ANSI_WARNINGS OFF;" +
+                    "INSERT INTO Category(categoryId, categoryName, dateCreate) " +
+                    "VALUES (?, ?, ?) " +
+                    "SET ANSI_WARNINGS ON";
+
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, category.getCategoryId());
+            pst.setString(2, category.getCategoryName());
+            pst.setString(3, dateCreate);
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Create successful");
             }
-        } return category;
+        }
+        return ResponseEntity.badRequest().body("Failed");
     }
+
 
     //Update Category
     public static ResponseEntity<String> updateCategory(Category category) throws Exception {
