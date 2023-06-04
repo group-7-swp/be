@@ -54,10 +54,9 @@ public class CategoryRepository {
     public static ResponseEntity<String> createCategory(Category category) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO Category (categoryId, categoryName) VALUES (?, ?)";
+            String sql = "INSERT INTO Category (categoryName) VALUES (?)";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, category.getCategoryId());
-            pst.setString(2, category.getCategoryName());
+            pst.setString(1, category.getCategoryName());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successfully");

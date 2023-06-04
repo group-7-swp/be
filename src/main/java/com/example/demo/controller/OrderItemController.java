@@ -18,11 +18,19 @@ public class OrderItemController {
     }
 
     @GetMapping("/getOrderItemById")
-    public ResponseEntity<Object> getOrderItemById(int orderId) throws Exception {
-        List<OrderItem> orderList = OrderItemRepository.getOrderItemById(orderId);
+    public ResponseEntity<Object> getOrderItemById(int orderItemId) throws Exception {
+        List<OrderItem> orderList = OrderItemRepository.getOrderItemById(orderItemId);
         if(orderList.size()>0) return ResponseEntity.ok().body(orderList.get(0));
         else return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/getOrderItemByOrderId")
+    public ResponseEntity<Object> getOrderItemByOrderId(int orderItemId) throws Exception {
+        List<OrderItem> orderList = OrderItemRepository.getOrderItemByOrderId(orderItemId);
+        if(orderList.size()>0) return ResponseEntity.ok().body(orderList);
+        else return ResponseEntity.badRequest().build();
+    }
+
     @DeleteMapping("/deleteOrderItem")
     public ResponseEntity<String> deleteOrderItem(@RequestParam int[] orderItemId) throws Exception {
         return OrderItemRepository.deleteOrderItem(orderItemId);

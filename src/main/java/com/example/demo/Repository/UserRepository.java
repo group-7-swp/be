@@ -9,8 +9,34 @@ import org.springframework.http.ResponseEntity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
+    public static List<User> getAllUser() throws Exception {
+        List<User> userList = new ArrayList<>();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "select * from dbo.Users";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    User user = new User();
+                    user.setUserId(table.getInt("userId"));
+                    user.setUserRole(table.getInt("userRole"));
+                    user.setUserName(table.getString("userName"));
+                    user.setUserUid(table.getString("userUid"));
+                    user.setEmail(table.getString("email"));
+                    user.setPhoneNumber(table.getString("phoneNumber"));
+                    user.setNote(table.getString("note"));
+                    userList.add(user);
+                }
+            }
+        }
+        return userList;
+    }
+
     public static User getUserByUserId(int userId) throws Exception {
         User user = new User();
         Connection cn = DBUtils.makeConnection();
@@ -83,6 +109,7 @@ public class UserRepository {
             pst.setString(2, user.getEmail());
             pst.setString(3, user.getPhoneNumber());
             pst.setString(4, user.getNote());
+            pst.setInt(5, user.getUserId());
             int row = pst.executeUpdate();
             if (row > 0) return ResponseEntity.ok().body("Update successfully");
         }

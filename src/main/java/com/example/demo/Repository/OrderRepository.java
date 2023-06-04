@@ -6,6 +6,7 @@ import com.example.demo.model.OrderAndOrderItem;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -121,7 +122,7 @@ public class OrderRepository {
             pst.setString(3, Order.getStatus());
             pst.setString(4, Order.getNote());
             pst.setInt(5, Order.getTotalPayment());
-            pst.setString(6, DBUtils.getCurrentDate());
+            pst.setString(6, Order.getPaymentDate().toString());
             pst.setInt(7, Order.getOrderId());
             int row = pst.executeUpdate();
             if (row > 0) {

@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.AddressRepository;
 import com.example.demo.Repository.CartRepository;
-import com.example.demo.model.Address;
 import com.example.demo.model.Cart;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

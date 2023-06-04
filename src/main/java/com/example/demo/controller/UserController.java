@@ -7,9 +7,18 @@ import com.example.demo.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    @GetMapping("/getAllUser")
+    public ResponseEntity<Object> getAllUser() throws Exception {
+        List<User> userList = UserRepository.getAllUser();
+        if (userList.size() > 0) return ResponseEntity.ok().body(userList);
+        else return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/getUserByUserId")
     public ResponseEntity<Object> getUserByUserId(@RequestParam int userId) throws Exception {
         User user = UserRepository.getUserByUserId(userId);
@@ -41,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    public ResponseEntity<String> updateUser(@RequestParam User user) throws Exception {
+    public ResponseEntity<String> updateUser(@RequestBody User user) throws Exception {
         return UserRepository.updateUser(user);
     }
 }

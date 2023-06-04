@@ -23,7 +23,7 @@ public class OrderItemRepository {
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setOrderId(table.getInt("orderItemId"));
+                    orderItem.setOrderItemId(table.getInt("orderItemsId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -40,14 +40,14 @@ public class OrderItemRepository {
         List<OrderItem> orderItemList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "Select * from dbo.OrderItems where orderItemId = ?";
+            String sql = "Select * from dbo.OrderItems where orderItemsId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, orderItemId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setOrderId(table.getInt("orderItemId"));
+                    orderItem.setOrderItemId(table.getInt("orderItemsId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -70,7 +70,7 @@ public class OrderItemRepository {
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setOrderId(table.getInt("orderItemId"));
+                    orderItem.setOrderId(table.getInt("orderItemsId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -95,6 +95,7 @@ public class OrderItemRepository {
             if (table != null) {
                 while (table.next()) {
                     OrderItem orderItem = new OrderItem();
+                    orderItem.setOrderId(table.getInt("orderItemsId"));
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
@@ -108,7 +109,7 @@ public class OrderItemRepository {
 
     //Delete existing Order item by product id
     public static ResponseEntity<String> deleteOrderItem(int[] orderItemId) throws Exception {
-        String sql = "Delete from dbo.OrderItems where orderItemId = ?";
+        String sql = "Delete from dbo.OrderItems where orderItemsId = ?";
         Connection cn = DBUtils.makeConnection();
         int count = 0;
         if (cn != null) {
@@ -147,12 +148,11 @@ public class OrderItemRepository {
     public static ResponseEntity<String> updateOrderItem(OrderItem orderItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "Update dbo.OrderItems set quantity = ?, totalPrice = ? where orderId = ? and productId = ?";
+            String sql = "Update dbo.OrderItems set quantity = ?, totalPrice = ? where orderItemsId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, orderItem.getQuantity());
             pst.setInt(2, orderItem.getTotalPrice());
-            pst.setInt(3, orderItem.getOrderId());
-            pst.setInt(4, orderItem.getProductId());
+            pst.setInt(3, orderItem.getOrderItemId());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Update successful");
