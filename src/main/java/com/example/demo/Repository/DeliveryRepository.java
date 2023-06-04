@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryRepository {
+<<<<<<< Updated upstream
     public static List<Delivery> getAllDelivery(int deliveryId, String address) throws Exception {
         List<Delivery> deliveryList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
@@ -22,6 +23,16 @@ public class DeliveryRepository {
             pst.setString(2, address);
             ResultSet table = pst.executeQuery();
             if (table != null) {
+=======
+    public static List<Delivery> getAllDelivery() throws Exception {
+        List<Delivery> deliveryList = new ArrayList<>();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "select * from dbo.Delivery";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            ResultSet table = pst.executeQuery();
+            if (table != null){
+>>>>>>> Stashed changes
                 while (table.next()) {
                     Delivery delivery = new Delivery();
                     delivery.setDeliveryId(table.getInt("deliveryId"));
@@ -29,12 +40,19 @@ public class DeliveryRepository {
                     deliveryList.add(delivery);
                 }
             }
+<<<<<<< Updated upstream
             cn.close();
+=======
+>>>>>>> Stashed changes
         }
         return deliveryList;
     }
 
+<<<<<<< Updated upstream
     public static Delivery getDeliveryByDeliveryId(int deliveryId) throws Exception {
+=======
+    public static Delivery getDeliveryById(int deliveryId) throws Exception {
+>>>>>>> Stashed changes
         Delivery delivery = new Delivery();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -66,6 +84,7 @@ public class DeliveryRepository {
         return ResponseEntity.badRequest().body("Create fail");
     }
 
+<<<<<<< Updated upstream
     public static ResponseEntity<String> updateDelivery(int paymentId, Address address) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -84,18 +103,37 @@ public class DeliveryRepository {
     }
 
     public static ResponseEntity<String> deleteDelivery(int deliveryId, String address) throws Exception {
+=======
+    public static ResponseEntity<String> deleteDelivery(int[] deliveryId) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        int count = 0;
+        if (cn!= null) {
+            for (int i = 0; i<deliveryId.length; i++) {
+                String sql = "Delete from Delivery where deliveryId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, deliveryId[i]);
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
+            }
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
+        }
+        return ResponseEntity.badRequest().body("Delete Fail");
+    }
+
+    public static ResponseEntity<String> updateDelivery(Delivery delivery) throws Exception {
+>>>>>>> Stashed changes
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "Delete from Delivery where deliveryId = ? AND address = ?";
+            String sql = "Update Delivery set address = ? where deliveryId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, deliveryId);
-            pst.setString(2, address);
+            pst.setString(1, delivery.getAddress());
+            pst.setInt(2, delivery.getDeliveryId());
             int row = pst.executeUpdate();
             if (row > 0) {
-                return ResponseEntity.ok().body("Delete successful");
+                return ResponseEntity.ok().body("Update successful");
             }
         }
-        return ResponseEntity.badRequest().body("Delete failed");
+        return ResponseEntity.badRequest().body("Update failed");
     }
 
 }
