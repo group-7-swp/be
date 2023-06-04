@@ -103,16 +103,18 @@ public class FeedbackRepository {
     }
 
     //Delete existing feedback by id
-    public static ResponseEntity<String> deleteFeedback(int feedbackId) throws Exception {
+    public static ResponseEntity<String> deleteFeedback(int[] feedbackId) throws Exception {
         String sql = "Delete from dbo.Feedback where feedbackId = ?";
         Connection cn = DBUtils.makeConnection();
+        int count = 0;
         if (cn != null) {
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, feedbackId);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Delete successful");
+            for (int i = 0; i<feedbackId.length; i++) {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, feedbackId[i]);
+                int row = pst.executeUpdate();
+                if (row > 0) count++;
             }
+            if (count > 0) return ResponseEntity.ok().body("Delete successful");
         }
         return ResponseEntity.badRequest().body("Failed");
     }

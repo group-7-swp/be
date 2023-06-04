@@ -90,16 +90,18 @@ public class CategoryRepository {
     }
 
     //Delete Category
-    public static ResponseEntity<String> deleteCategory(int categoryId) throws Exception {
+    public static ResponseEntity<String> deleteCategory(int[] categoryId) throws Exception {
         Connection cn = DBUtils.makeConnection();
+        int count = 0;
         if (cn!= null) {
-            String sql = "Delete from dbo.Category where categoryId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, categoryId);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Delete Successfully");
+            for (int i = 0; i<categoryId.length; i++) {
+                String sql = "Delete from dbo.Category where categoryId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, categoryId[i]);
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
             }
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }

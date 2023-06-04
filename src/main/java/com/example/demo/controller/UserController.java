@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.Repository.UserRepository;
+import com.example.demo.model.Address;
+import com.example.demo.model.Cart;
 import com.example.demo.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +33,15 @@ public class UserController {
     @PostMapping("/createUser")
     public ResponseEntity<String> createUser (@RequestBody User user) throws Exception {
         return UserRepository.createUser(user);
+    }
+
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<String> deleteUser(@RequestParam int[] userId) throws Exception {
+        return UserRepository.deleteUser(userId);
+    }
+
+    @PostMapping("/updateUser")
+    public ResponseEntity<String> updateUser(@RequestParam User user) throws Exception {
+        return UserRepository.updateUser(user);
     }
 }
