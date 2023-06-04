@@ -164,18 +164,16 @@ public class ProductRepository {
     }
 
     //Delete existing product by id
-    public static ResponseEntity<String> deleteProduct(int[] productId) throws Exception {
+    public static ResponseEntity<String> deleteProduct(int productId) throws Exception {
         String sql = "Delete from dbo.Product where productId = ?";
         Connection cn = DBUtils.makeConnection();
-        int count = 0;
         if (cn != null) {
-            for (int i = 0; i<productId.length; i++) {
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, productId[i]);
-                int row = pst.executeUpdate();
-                if (row > 0) count++;
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, productId);
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Delete successful");
             }
-            if (count > 0)return ResponseEntity.ok().body("Delete successful");
         }
         return ResponseEntity.badRequest().body("Failed");
     }

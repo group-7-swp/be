@@ -13,15 +13,13 @@ public class FeedbackController {
     @GetMapping("/allFeedback")
     public ResponseEntity<Object> getAllFeedback() throws Exception {
         List<Feedback> feedbackList = FeedbackRepository.getAllFeedback();
-        if(feedbackList.size()>0) return ResponseEntity.ok().body(feedbackList);
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(feedbackList);
     }
 
     @GetMapping("/getFeedbackById")
     public ResponseEntity<Object> getFeedbackById(@RequestParam int feedbackId) throws Exception {
         Feedback feedback = FeedbackRepository.getFeedbackById(feedbackId);
-        if(feedback!=null) return ResponseEntity.ok().body(feedback);
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(feedback);
     }
 
     @PostMapping("/createFeedback")
@@ -30,7 +28,7 @@ public class FeedbackController {
     }
 
     @DeleteMapping("/deleteFeedback")
-    public ResponseEntity<String> deleteFeedback(@RequestParam int[] feedbackId) throws Exception {
+    public ResponseEntity<String> deleteFeedback(@RequestParam int feedbackId) throws Exception {
         return FeedbackRepository.deleteFeedback(feedbackId);
     }
 

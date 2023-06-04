@@ -69,18 +69,16 @@ public class OrderRepository {
     }
 
     //Delete existing Order by id
-    public static ResponseEntity<String> deleteOrder(int[] orderId) throws Exception {
+    public static ResponseEntity<String> deleteOrder(int orderId) throws Exception {
         String sql = "Delete from dbo.Orders where orderId = ?";
         Connection cn = DBUtils.makeConnection();
-        int count = 0;
         if (cn != null) {
-            for (int i = 0; i<orderId.length; i++) {
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, orderId[i]);
-                int row = pst.executeUpdate();
-                if (row > 0) count++;
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, orderId);
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Delete successful");
             }
-            if (count > 0)return ResponseEntity.ok().body("Delete successful");
         }
         return ResponseEntity.badRequest().body("Failed");
     }

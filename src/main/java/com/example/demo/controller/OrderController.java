@@ -15,18 +15,16 @@ public class OrderController {
     @GetMapping("/getAllOrder")
     public ResponseEntity<Object> getAllOrder() throws Exception {
         List<Order> orderList = OrderRepository.getAllOrder();
-        if(orderList.size()>0) return ResponseEntity.ok().body(orderList);
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(orderList);
     }
 
     @GetMapping("/getOrderById")
     public ResponseEntity<Object> getOrderById(int orderItemId) throws Exception {
         List<Order> orderList = OrderRepository.getOrderById(orderItemId);
-        if(orderList.size()>0) return ResponseEntity.ok().body(orderList.get(0));
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(orderList);
     }
     @DeleteMapping("/deleteOrder")
-    public ResponseEntity<String> deleteOrder(@RequestParam int[] orderItemId) throws Exception {
+    public ResponseEntity<String> deleteOrder(@RequestParam int orderItemId) throws Exception {
         return OrderRepository.deleteOrder(orderItemId);
     }
 
@@ -43,7 +41,6 @@ public class OrderController {
     @PostMapping("/getOrderAndOrderItem")
     public ResponseEntity<Object> getOrderAndOrderItem() throws Exception {
         List<OrderAndOrderItem> orderAndOrderItemList = OrderRepository.getOrderAndOrderItem();
-        if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);
-        else return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().body(orderAndOrderItemList);
     }
 }
