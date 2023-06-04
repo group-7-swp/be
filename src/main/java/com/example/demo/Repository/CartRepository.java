@@ -2,7 +2,6 @@ package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Cart;
-import com.example.demo.model.Order;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
@@ -81,12 +80,11 @@ public class CartRepository {
     public static ResponseEntity<String> createCart(Cart cart) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO Carts (cartId, userId, dateUpdate) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Carts (userId, dateUpdate) VALUES (?, ?)";
 
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cart.getCartId());
-            pst.setInt(2, cart.getUserId());
-            pst.setString(3, DBUtils.getCurrentDate());
+            pst.setInt(1, cart.getUserId());
+            pst.setString(2, DBUtils.getCurrentDate());
 
             int row = pst.executeUpdate();
             if (row > 0) {
@@ -96,39 +94,20 @@ public class CartRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-    //Update Cart
-    public static ResponseEntity<String> updateCart(Cart cart) throws Exception {
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "UPDATE Carts SET userId = ?, dateUpdate = ? WHERE cartId = ?";
-
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cart.getUserId());
-            pst.setString(2, DBUtils.getCurrentDate());
-            pst.setInt(3, cart.getCartId());
-
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Update successful");
-            }
-        }
-        return ResponseEntity.badRequest().body("Failed");
-    }
-
     //Delete Cart
-    public static ResponseEntity<String> deleteCart(int cartId, int userId, Date dateUpdate) throws Exception {
+    public static ResponseEntity<String> deleteCart(int[] cartId) throws Exception {
         Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "DELETE FROM Cart WHERE cartId = ? AND userId = ? AND dateUpdate = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
-            pst.setInt(2, userId);
-            pst.setDate(3, new java.sql.Date(dateUpdate.getTime()));
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Delete successful");
+        int count = 0;
+        if (cn!= null) {
+            for (int i = 0; i<cartId.length; i++) {
+                String sql = "DELETE FROM Cart WHERE cartId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, cartId[i]);
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
             }
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
-        return ResponseEntity.badRequest().body("Delete failed");
+        return ResponseEntity.badRequest().body("Delete Fail");
     }
 }

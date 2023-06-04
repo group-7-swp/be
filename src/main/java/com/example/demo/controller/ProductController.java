@@ -15,37 +15,43 @@ public class ProductController {
     @GetMapping("/allProduct")
     public ResponseEntity<Object> getAllProduct() throws Exception {
         List<Product> productList = ProductRepository.getAllProduct();
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/searchByName")
     public ResponseEntity<Object> searchByName(@RequestParam String productName) throws Exception {
         List<Product> productList = ProductRepository.searchByName(productName);
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList.get(0));
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/getProductById")
     public ResponseEntity<Object> getProductById(@RequestParam int productId) throws Exception {
         List<Product> productList = ProductRepository.getProductById(productId);
-        return ResponseEntity.ok().body(productList.get(0));
+        if(productList.size()>0) return ResponseEntity.ok().body(productList.get(0));
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/filterByPrice")
     public ResponseEntity<Object> filterByPrice(@Parameter int from, int to) throws Exception {
         List<Product> productList = ProductRepository.sortByPrice(from, to);
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/filterByStatus")
     public ResponseEntity<Object> filterByStatus(@Parameter String status) throws Exception {
         List<Product> productList = ProductRepository.filterByStatus(status);
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/multiFilter")
     public ResponseEntity<Object> multiFilter(@RequestParam(required = false) String categoryName, String price, String status) throws Exception {
         List<Product> productList = ProductRepository.multiFilter(categoryName, price, status);
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createProduct")
@@ -54,7 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct")
-    public ResponseEntity<String>  deleteProduct(@RequestParam int productId) throws Exception {
+    public ResponseEntity<String>  deleteProduct(@RequestParam int[] productId) throws Exception {
         return ProductRepository.deleteProduct(productId);
     }
 
@@ -66,6 +72,7 @@ public class ProductController {
     @GetMapping("/filterByCategory")
     public ResponseEntity<Object> getProductByCategoryId(@RequestParam int categoryId) throws Exception {
         List<Product> productList = ProductRepository.filterByCategoryId(categoryId);
-        return ResponseEntity.ok().body(productList);
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
     }
 }

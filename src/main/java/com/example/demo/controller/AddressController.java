@@ -13,14 +13,17 @@ import java.util.List;
 public class AddressController {
     @GetMapping("/allAddress")
     public ResponseEntity<Object> getAllAddress() throws Exception {
-        List<Address> feedbackList = AddressRepository.getAllAddress();
-        return ResponseEntity.ok().body(feedbackList);
+        List<Address> addressList = AddressRepository.getAllAddress();
+        if(addressList.size()>0) return ResponseEntity.ok().body(addressList);
+        else return ResponseEntity.badRequest().build();
+
     }
 
     @GetMapping("/getAddressById")
     public ResponseEntity<Object> getAddressById(@RequestParam int addressId) throws Exception {
-        Address address = AddressRepository.getAddressById(addressId);
-        return ResponseEntity.ok().body(address);
+        List<Address> addressList = AddressRepository.getAddressById(addressId);
+        if(addressList.size()>0) return ResponseEntity.ok().body(addressList.get(0));
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createAddress")
@@ -29,12 +32,12 @@ public class AddressController {
     }
 
     @DeleteMapping("/deleteAddress")
-    public ResponseEntity<String> deleteAddress(@RequestParam int addressId) throws Exception {
+    public ResponseEntity<String> deleteAddress(@RequestParam int[] addressId) throws Exception {
         return AddressRepository.deleteAddress(addressId);
     }
 
     @PatchMapping("/updateAddress")
-    public ResponseEntity<String> updateAddress(@RequestBody Address address) throws Exception {
-        return AddressRepository.updateAddress(address);
+    public ResponseEntity<String> updateAddress(@RequestBody Address adress) throws Exception {
+        return AddressRepository.updateAddress(adress);
     }
 }

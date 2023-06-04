@@ -6,15 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItems {
+    private int cartItemId;
     private int cartId;
     private int productId;
     private int quantity;
-    private double totalPrice;
+    private int totalPrice;
 }

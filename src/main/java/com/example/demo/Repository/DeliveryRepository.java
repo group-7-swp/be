@@ -1,7 +1,6 @@
 package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
-import com.example.demo.model.Address;
 import com.example.demo.model.Delivery;
 import org.springframework.http.ResponseEntity;
 
@@ -12,16 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryRepository {
-    public static List<Delivery> getAllDelivery(int deliveryId, String address) throws Exception {
+    public static List<Delivery> getAllDelivery() throws Exception {
         List<Delivery> deliveryList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM Delivery WHERE paymentId = ? AND address = ?";
+            String sql = "select * from dbo.Delivery";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, deliveryId);
-            pst.setString(2, address);
             ResultSet table = pst.executeQuery();
-            if (table != null) {
+            if (table != null){
                 while (table.next()) {
                     Delivery delivery = new Delivery();
                     delivery.setDeliveryId(table.getInt("deliveryId"));
@@ -29,12 +26,11 @@ public class DeliveryRepository {
                     deliveryList.add(delivery);
                 }
             }
-            cn.close();
         }
         return deliveryList;
     }
 
-    public static Delivery getDeliveryByDeliveryId(int deliveryId) throws Exception {
+    public static Delivery getDeliveryById(int deliveryId) throws Exception {
         Delivery delivery = new Delivery();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -66,36 +62,35 @@ public class DeliveryRepository {
         return ResponseEntity.badRequest().body("Create fail");
     }
 
-    public static ResponseEntity<String> updateDelivery(int paymentId, Address address) throws Exception {
+    public static ResponseEntity<String> deleteDelivery(int[] deliveryId) throws Exception {
         Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "UPDATE Delivery SET address = ? WHERE paymentId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, address.getAddress());
-            pst.setInt(2, paymentId);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                cn.close();
-                return ResponseEntity.ok().body("Update successful");
+        int count = 0;
+        if (cn!= null) {
+            for (int i = 0; i<deliveryId.length; i++) {
+                String sql = "Delete from Delivery where deliveryId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, deliveryId[i]);
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
             }
-            cn.close();
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return ResponseEntity.badRequest().body("Delete Fail");
     }
 
-    public static ResponseEntity<String> deleteDelivery(int deliveryId, String address) throws Exception {
+    public static ResponseEntity<String> updateDelivery(Delivery delivery) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "Delete from Delivery where deliveryId = ? AND address = ?";
+            String sql = "Update Delivery set address = ? where deliveryId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, deliveryId);
-            pst.setString(2, address);
+            pst.setString(1, delivery.getAddress());
+            pst.setInt(2, delivery.getDeliveryId());
             int row = pst.executeUpdate();
             if (row > 0) {
-                return ResponseEntity.ok().body("Delete successful");
+                return ResponseEntity.ok().body("Update successful");
             }
         }
-        return ResponseEntity.badRequest().body("Delete failed");
+        return ResponseEntity.badRequest().body("Update failed");
     }
 
 }

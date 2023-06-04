@@ -33,28 +33,29 @@ public class AddressRepository {
         } return addressList;
     }
 
-    public static Address getAddressById(int addressId) throws Exception {
-        Address address = new Address();
+    public static List<Address> getAddressById(int addressId) throws Exception {
+        List<Address> addressList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Select * from dbo.Address where addressId = ? ";
+        if (cn != null){
+            String sql = "Select * from dbo.Address where addressId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, addressId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
+                    Address address = new Address();
                     address.setAddressId(table.getInt("addressId"));
                     address.setUserId(table.getInt("userId"));
                     address.setAddress(table.getString("address"));
                     address.setDateCreate(table.getDate("dateCreate"));
                     address.setDateUpdate(table.getDate("dateUpdate"));
+                    addressList.add(address);
                 }
             }
-        }
-        return address;
+        } return addressList;
     }
 
-    //Create new Address
+    //Create new Category
     public static ResponseEntity<String> createAddress(Address address) throws Exception {
         Address category = new Address();
         Connection cn = DBUtils.makeConnection();
@@ -65,6 +66,7 @@ public class AddressRepository {
             pst.setString(2, address.getAddress());
             pst.setString(3, DBUtils.getCurrentDate());
             int row = pst.executeUpdate();
+
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");
             }
@@ -72,7 +74,7 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-    //Update Address
+    //Update Category
     public static ResponseEntity<String> updateAddress(Address address) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -91,17 +93,20 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-    //Delete Address
-    public static ResponseEntity<String> deleteAddress(int addressId) throws Exception {
+    //Delete Category
+    public static ResponseEntity<String> deleteAddress(int[] addressId) throws Exception {
         Connection cn = DBUtils.makeConnection();
+        int count = 0;
         if (cn!= null) {
-            String sql = "Delete from dbo.Address where addressId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, addressId);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Delete Successfully");
+            for (int i = 0; i<addressId.length; i++) {
+                String sql = "Delete from dbo.Address where addressId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, addressId[i]);
+                pst.executeUpdate();
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
             }
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }

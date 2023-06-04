@@ -27,8 +27,9 @@ public class PaymentController {
 
     @GetMapping("/getPaymentById")
     public ResponseEntity<Object> getPaymentById(@RequestParam int paymentId) throws Exception {
-        Payment payment = PaymentRepository.getPaymentById(paymentId);
-        return ResponseEntity.ok().body(payment);
+        List<Payment> paymentList = PaymentRepository.getAllPayment();
+        if (paymentList.size() != 0) return ResponseEntity.ok().body(paymentList.get(0));
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createPayment")

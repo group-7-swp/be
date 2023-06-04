@@ -16,17 +16,17 @@ public class CartItemsRepository {
         List<CartItems> cartItemsList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM CartItems WHERE cartId = ?";
+            String sql = "SELECT * FROM CartItems";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
                     CartItems cartItems = new CartItems();
+                    cartItems.setCartId(table.getInt("cartItemId"));
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
-                    cartItems.setTotalPrice(table.getDouble("totalPrice"));
+                    cartItems.setTotalPrice(table.getInt("totalPrice"));
                     cartItemsList.add(cartItems);
                 }
             }
@@ -34,21 +34,22 @@ public class CartItemsRepository {
         return cartItemsList;
     }
 
-    public static List<CartItems> getCartItemsByCartId(int cartId) throws Exception {
+    public static List<CartItems> getCartItemsByCartId(int cartItemId) throws Exception {
         List<CartItems> cartItemsList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM CartItems WHERE cartId = ?";
+            String sql = "SELECT * FROM CartItems WHERE cartItemId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
+            pst.setInt(1, cartItemId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
                     CartItems cartItems = new CartItems();
+                    cartItems.setCartId(table.getInt("cartItemId"));
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
-                    cartItems.setTotalPrice(table.getDouble("totalPrice"));
+                    cartItems.setTotalPrice(table.getInt("totalPrice"));
                     cartItemsList.add(cartItems);
                 }
             }
@@ -57,15 +58,15 @@ public class CartItemsRepository {
     }
 
     //Create cartItems
-    public static ResponseEntity<String> createCartItems(int cartId, int productId, int quantity, double totalPrice) throws Exception {
+    public static ResponseEntity<String> createCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
             String sql = "INSERT INTO CartItems (cartId, productId, quantity, totalPrice) VALUES (?, ?, ?, ?)";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
-            pst.setInt(2, productId);
-            pst.setInt(3, quantity);
-            pst.setDouble(4, totalPrice);
+            pst.setInt(1, cartItem.getCartId());
+            pst.setInt(2, cartItem.getProductId());
+            pst.setInt(3, cartItem.getQuantity());
+            pst.setInt(4, cartItem.getTotalPrice());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");
@@ -75,15 +76,14 @@ public class CartItemsRepository {
     }
 
     //Update cartItems
-    public static ResponseEntity<String> updateCartItems(int cartId, int productId, int quantity, double totalPrice) throws Exception {
+    public static ResponseEntity<String> updateCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "UPDATE CartItems SET quantity = ?, totalPrice = ? WHERE cartId = ? AND productId = ?";
+            String sql = "UPDATE CartItems SET quantity = ?, totalPrice = ? WHERE cartItemId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, quantity);
-            pst.setDouble(2, totalPrice);
-            pst.setInt(3, cartId);
-            pst.setInt(4, productId);
+            pst.setInt(1, cartItem.getQuantity());
+            pst.setDouble(2, cartItem.getTotalPrice());
+            pst.setInt(3, cartItem.getCartItemId());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Update successful");
@@ -93,23 +93,19 @@ public class CartItemsRepository {
     }
 
     //Delete cartItems
-    public static ResponseEntity<String> deleteCartItem(int cartId, int productId, int quantity, double totalPrice) throws Exception {
+    public static ResponseEntity<String> deleteCartItem(int[] cartItemId) throws Exception {
         Connection cn = DBUtils.makeConnection();
+        int count = 0;
         if (cn != null) {
-            String sql = "DELETE FROM CartItem WHERE cartId = ? AND productId = ? AND quantity = ? AND totalPrice = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
-            pst.setInt(2, productId);
-            pst.setInt(3, quantity);
-            pst.setDouble(4, totalPrice);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Delete successful");
+            for (int i = 0; i<cartItemId.length; i++) {
+                String sql = "DELETE FROM CartItem WHERE cartItemId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, cartItemId[i]);
+                int row = pst.executeUpdate();
+                if(row > 0) count++;
             }
+            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
-        return ResponseEntity.badRequest().body("Delete failed");
+        return ResponseEntity.badRequest().body("Delete Fail");
     }
-
-
-
 }
