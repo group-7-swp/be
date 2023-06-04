@@ -98,7 +98,7 @@ public class AddressRepository {
         Connection cn = DBUtils.makeConnection();
         int count = 0;
         if (cn!= null) {
-            for (int i = 0; i<addressId.length; i++) {
+            for (int i = 0; i < addressId.length; i++) {
                 String sql = "Delete from dbo.Address where addressId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, addressId[i]);
