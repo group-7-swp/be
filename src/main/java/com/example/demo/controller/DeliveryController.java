@@ -8,6 +8,7 @@ import com.example.demo.model.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
 import java.util.List;
 
 @RestController
@@ -28,20 +29,18 @@ public class DeliveryController {
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/getCartById")
-    public ResponseEntity<Object> getCartByCartId(@RequestParam int cartId) throws Exception {
-        List<Cart> cartList = CartRepository.getCartByCartId(cartId);
-        if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
-        else return ResponseEntity.badRequest().build();
+    @PostMapping("/createDelivery")
+    public ResponseEntity<String> createDelivery(@RequestParam Delivery delivery) throws Exception {
+        return DeliveryRepository.createDelivery(delivery);
     }
 
-    @PostMapping("/createCart")
-    public ResponseEntity<String> createCart(@RequestBody Cart cart) throws Exception {
-        return CartRepository.createCart(cart);
+    @PatchMapping("/updateDelivery")
+    public ResponseEntity<String> updateDelivery(@RequestParam Delivery delivery) throws Exception {
+        return DeliveryRepository.updateDelivery(delivery);
     }
 
-    @DeleteMapping("/deleteCart")
-    public ResponseEntity<String> deleteCart(@RequestParam int[] cartId) throws Exception {
-        return CartRepository.deleteCart(cartId);
+    @DeleteMapping("/deleteDeliery")
+    public ResponseEntity<String> deleteDelivery(@RequestParam int[] deliveryId) throws Exception {
+        return DeliveryRepository.deleteDelivery(deliveryId);
     }
 }

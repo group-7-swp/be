@@ -51,23 +51,19 @@ public class CategoryRepository {
     }
 
     //Create new Category
-    public static Category createCategory(String categoryName) throws Exception {
-        Category category = new Category();
+    public static ResponseEntity<String> createCategory(Category category) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO dbo.Category (categoryName) VALUES (?)";
-            PreparedStatement pst = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, categoryName);
-            int affectedRows = pst.executeUpdate();
-            if (affectedRows > 0) {
-                ResultSet generatedKeys = pst.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int categoryId = generatedKeys.getInt(1);
-                    category.setCategoryId(categoryId);
-                    category.setCategoryName(categoryName);
-                }
+            String sql = "INSERT INTO Category (categoryId, categoryName) VALUES (?, ?)";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, category.getCategoryId());
+            pst.setString(2, category.getCategoryName());
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Create successfully");
             }
-        } return category;
+        }
+        return ResponseEntity.badRequest().body("Create fail");
     }
 
     //Update Category

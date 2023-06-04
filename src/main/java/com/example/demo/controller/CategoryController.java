@@ -6,6 +6,8 @@ import com.example.demo.model.CategoryAndProduct;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Retention;
+import java.security.PublicKey;
 import java.util.List;
 
 @RestController
@@ -23,7 +25,6 @@ public class CategoryController {
         }
     }
 
-    //
     @GetMapping("/searchById")
     public ResponseEntity<Object> searchById(@RequestParam int categoryId) throws Exception {
         Category category = CategoryRepository.getCategoryById(categoryId);
@@ -34,7 +35,19 @@ public class CategoryController {
         }
     }
 
-    //
+    @PostMapping("/createCategory")
+    public ResponseEntity<String> createCategory(@RequestParam Category category) throws Exception {
+        return CategoryRepository.createCategory(category);
+    }
+    @PatchMapping("/updateCategory")
+    public ResponseEntity<String> updateCategory(@RequestParam Category category) throws Exception {
+        return CategoryRepository.updateCategory(category);
+    }
+    @DeleteMapping("/deleteCategory")
+    public ResponseEntity<String> deleteCategory(@RequestParam int[] categoryId) throws Exception {
+        return CategoryRepository.deleteCategory(categoryId);
+    }
+
     @GetMapping("/getCategoryAndProduct")
     public ResponseEntity<Object> getCategoryAndProduct() throws Exception {
         List<CategoryAndProduct> categoryAndProductList = CategoryRepository.getCategoryAndProduct();

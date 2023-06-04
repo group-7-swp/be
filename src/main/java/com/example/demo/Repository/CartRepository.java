@@ -75,7 +75,6 @@ public class CartRepository {
     }
 
 
-
     //Create a new cart
     public static ResponseEntity<String> createCart(Cart cart) throws Exception {
         Connection cn = DBUtils.makeConnection();
