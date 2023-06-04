@@ -36,11 +36,11 @@ public class CategoryController {
     }
 
     @PostMapping("/createCategory")
-    public ResponseEntity<String> createCategory(@RequestParam Category category) throws Exception {
+    public ResponseEntity<String> createCategory(@RequestBody Category category) throws Exception {
         return CategoryRepository.createCategory(category);
     }
     @PatchMapping("/updateCategory")
-    public ResponseEntity<String> updateCategory(@RequestParam Category category) throws Exception {
+    public ResponseEntity<String> updateCategory(@RequestBody Category category) throws Exception {
         return CategoryRepository.updateCategory(category);
     }
     @DeleteMapping("/deleteCategory")

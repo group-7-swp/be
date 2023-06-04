@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemsRepository {
-    public static List<CartItems> getAllCartItems(int cartId) throws Exception {
+    public static List<CartItems> getAllCartItems() throws Exception {
         List<CartItems> cartItemsList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -22,7 +22,7 @@ public class CartItemsRepository {
             if (table != null) {
                 while (table.next()) {
                     CartItems cartItems = new CartItems();
-                    cartItems.setCartId(table.getInt("cartItemId"));
+                    cartItems.setCartItemId(table.getInt("cartItemId"));
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
@@ -34,7 +34,7 @@ public class CartItemsRepository {
         return cartItemsList;
     }
 
-    public static List<CartItems> getCartItemsByCartId(int cartItemId) throws Exception {
+    public static List<CartItems> getCartItemsById(int cartItemId) throws Exception {
         List<CartItems> cartItemsList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -45,7 +45,7 @@ public class CartItemsRepository {
             if (table != null) {
                 while (table.next()) {
                     CartItems cartItems = new CartItems();
-                    cartItems.setCartId(table.getInt("cartItemId"));
+                    cartItems.setCartItemId(table.getInt("cartItemId"));
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
@@ -98,7 +98,7 @@ public class CartItemsRepository {
         int count = 0;
         if (cn != null) {
             for (int i = 0; i<cartItemId.length; i++) {
-                String sql = "DELETE FROM CartItem WHERE cartItemId = ?";
+                String sql = "DELETE FROM CartItems WHERE cartItemId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, cartItemId[i]);
                 int row = pst.executeUpdate();

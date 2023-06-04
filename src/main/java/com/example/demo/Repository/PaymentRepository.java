@@ -67,12 +67,26 @@ public class PaymentRepository {
         int count = 0;
         if (cn != null) {
             for (int i = 0; i<paymentId.length; i++) {
-                String sql = "Delete from Payment where paymentId";
+                String sql = "Delete from Payment where paymentId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, paymentId[i]);
                 int row = pst.executeUpdate();
+                if(row > 0)count++;
             }
-            if (count > 0)return ResponseEntity.ok().body("Delete successful");
+            if (count > 0) return ResponseEntity.ok().body("Delete successful");
+        }
+        return ResponseEntity.badRequest().body("Failed");
+    }
+
+    public static ResponseEntity<String> updatePayment(Payment payment) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "UPDATE Payment SET paymentType = ? WHERE paymentId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, payment.getPaymentType());
+            pst.setInt(2, payment.getPaymentId());
+            int row = pst.executeUpdate();
+            if (row > 0) return ResponseEntity.ok().body("Create successful");
         }
         return ResponseEntity.badRequest().body("Failed");
     }

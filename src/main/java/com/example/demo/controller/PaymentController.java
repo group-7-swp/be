@@ -33,17 +33,17 @@ public class PaymentController {
     }
 
     @PostMapping("/createPayment")
-    public ResponseEntity<Object> createPayment(@RequestParam Payment payment) throws Exception {
-        return ResponseEntity.ok().body(payment);
+    public ResponseEntity<String> createPayment(@RequestBody Payment payment) throws Exception {
+        return PaymentRepository.createPayment(payment);
     }
 
     @PatchMapping("/updatePayment")
-    public ResponseEntity<Object> updatePayment(@RequestParam Payment payment) throws Exception {
-        return ResponseEntity.ok().body(payment);
+    public ResponseEntity<String> updatePayment(@RequestBody Payment payment) throws Exception {
+        return PaymentRepository.updatePayment(payment);
     }
 
     @DeleteMapping("/deletePayment")
-    public ResponseEntity<Object> deletePayment(@RequestParam int paymentId) {
-        return ResponseEntity.ok().body(paymentId);
+    public ResponseEntity<String> deletePayment(@RequestParam int[] paymentId) throws Exception {
+        return PaymentRepository.deletePayment(paymentId);
     }
 }

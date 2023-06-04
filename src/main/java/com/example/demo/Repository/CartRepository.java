@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CartRepository {
@@ -16,7 +15,7 @@ public class CartRepository {
         List<Cart> cartList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM dbo.Carts";
+            String sql = "SELECT * FROM dbo.Cart";
             PreparedStatement pst = cn.prepareStatement(sql);
             ResultSet table = pst.executeQuery();
             if (table != null) {
@@ -36,7 +35,7 @@ public class CartRepository {
         List<Cart> cartList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM Carts WHERE cartId = ?";
+            String sql = "SELECT * FROM Cart WHERE cartId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cartId);
             ResultSet table = pst.executeQuery();
@@ -57,7 +56,7 @@ public class CartRepository {
         List<Cart> cartList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "SELECT * FROM Carts WHERE userId = ?";
+            String sql = "SELECT * FROM Cart WHERE userId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cartId);
             ResultSet table = pst.executeQuery();
@@ -79,7 +78,7 @@ public class CartRepository {
     public static ResponseEntity<String> createCart(Cart cart) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO Carts (userId, dateUpdate) VALUES (?, ?)";
+            String sql = "INSERT INTO Cart (userId, dateUpdate) VALUES (?, ?)";
 
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cart.getUserId());

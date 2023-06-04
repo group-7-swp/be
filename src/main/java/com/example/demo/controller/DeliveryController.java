@@ -30,16 +30,16 @@ public class DeliveryController {
     }
 
     @PostMapping("/createDelivery")
-    public ResponseEntity<String> createDelivery(@RequestParam Delivery delivery) throws Exception {
+    public ResponseEntity<String> createDelivery(@RequestBody Delivery delivery) throws Exception {
         return DeliveryRepository.createDelivery(delivery);
     }
 
     @PatchMapping("/updateDelivery")
-    public ResponseEntity<String> updateDelivery(@RequestParam Delivery delivery) throws Exception {
+    public ResponseEntity<String> updateDelivery(@RequestBody Delivery delivery) throws Exception {
         return DeliveryRepository.updateDelivery(delivery);
     }
 
-    @DeleteMapping("/deleteDeliery")
+    @DeleteMapping("/deleteDelivery")
     public ResponseEntity<String> deleteDelivery(@RequestParam int[] deliveryId) throws Exception {
         return DeliveryRepository.deleteDelivery(deliveryId);
     }

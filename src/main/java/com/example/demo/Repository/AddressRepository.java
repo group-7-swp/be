@@ -102,7 +102,6 @@ public class AddressRepository {
                 String sql = "Delete from dbo.Address where addressId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, addressId[i]);
-                pst.executeUpdate();
                 int row = pst.executeUpdate();
                 if(row > 0) count++;
             }
