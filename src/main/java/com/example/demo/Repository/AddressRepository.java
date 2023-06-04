@@ -33,26 +33,25 @@ public class AddressRepository {
         } return addressList;
     }
 
-    public static List<Address> getAddressById(int addressId) throws Exception {
-        List<Address> addressList = new ArrayList<>();
+    public static Address getAddressById(int addressId) throws Exception {
+        Address address = new Address();
         Connection cn = DBUtils.makeConnection();
-        if (cn != null){
-            String sql = "Select * from dbo.Address where addressId = ?";
+        if (cn != null) {
+            String sql = "Select * from dbo.Address where addressId = ? ";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, addressId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {
-                    Address address = new Address();
                     address.setAddressId(table.getInt("addressId"));
                     address.setUserId(table.getInt("userId"));
                     address.setAddress(table.getString("address"));
                     address.setDateCreate(table.getDate("dateCreate"));
                     address.setDateUpdate(table.getDate("dateUpdate"));
-                    addressList.add(address);
                 }
             }
-        } return addressList;
+        }
+        return address;
     }
 
     //Create new Address
@@ -92,25 +91,17 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
-<<<<<<< Updated upstream
     //Delete Address
     public static ResponseEntity<String> deleteAddress(int addressId) throws Exception {
-=======
-    //Delete Category
-    public static ResponseEntity<String> deleteAddress(int[] addressId) throws Exception {
->>>>>>> Stashed changes
         Connection cn = DBUtils.makeConnection();
-        int count = 0;
         if (cn!= null) {
-            for (int i = 0; i<addressId.length; i++) {
-                String sql = "Delete from dbo.Address where addressId = ?";
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, addressId[i]);
-                pst.executeUpdate();
-                int row = pst.executeUpdate();
-                if(row > 0) count++;
+            String sql = "Delete from dbo.Address where addressId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, addressId);
+            int row = pst.executeUpdate();
+            if (row > 0) {
+                return ResponseEntity.ok().body("Delete Successfully");
             }
-            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }
