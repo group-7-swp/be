@@ -108,4 +108,20 @@ public class CartItemsRepository {
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }
+
+    public static int countCartItems(int cartId) throws Exception {
+        Connection cn = DBUtils.makeConnection();
+        int count = 0;
+        if (cn != null) {
+            String sql = "select cartId, count(*) as count from CartItems where cartId = ? group by cartId";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, cartId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                table.next();
+                count = table.getInt("count");
+            }
+        }
+        return count;
+    }
 }

@@ -38,4 +38,11 @@ public class CartItemController {
     public ResponseEntity<String> deleteCartItem(@RequestParam int[] cartItemId) throws Exception {
         return CartItemsRepository.deleteCartItem(cartItemId);
     }
+
+    @GetMapping("/countCartItems")
+    public ResponseEntity<Integer> countCartItems(@RequestParam int cartId) throws Exception {
+        int count = CartItemsRepository.countCartItems(cartId);
+        if(count>0) return ResponseEntity.ok().body(count);
+        else return ResponseEntity.badRequest().build();
+    }
 }
