@@ -22,7 +22,7 @@ public class ProductController {
     @GetMapping("/searchByName")
     public ResponseEntity<Object> searchByName(@RequestParam String productName) throws Exception {
         List<Product> productList = ProductRepository.searchByName(productName);
-        if(productList.size()>0) return ResponseEntity.ok().body(productList.get(0));
+        if(productList.size()>0) return ResponseEntity.ok().body(productList);
         else return ResponseEntity.badRequest().build();
     }
 
