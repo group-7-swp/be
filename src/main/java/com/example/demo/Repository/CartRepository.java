@@ -120,10 +120,11 @@ public class CartRepository {
             List<CartItems> cartItemsList = getCartItemsById(cartList.get(i).getCartId());
             CartAndCartItem cartAndCartItem = new CartAndCartItem();
             cartAndCartItem.setCart(cartList.get(i));
-            cartAndCartItem.setCartItemsList(cartItemsList);
+            cartAndCartItem.setCartItems(cartItemsList);
             cartAndCartItemList.add(cartAndCartItem);
         }
         return cartAndCartItemList;
     }
+
 
 }
