@@ -137,7 +137,6 @@ public class CartRepository {
             if (table.next()) {
                 cart = new Cart();
                 cart.setCartId(table.getInt("cartId"));
-                // Set other properties of the cart object from the result set
             }
         }
         return cart;
