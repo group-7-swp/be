@@ -2,6 +2,8 @@ package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Cart;
+import com.example.demo.model.CartAndCartItem;
+import com.example.demo.model.CartItems;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
@@ -9,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.demo.Repository.CartItemsRepository.getCartItemsById;
 
 public class CartRepository {
     public static List<Cart> getAllCart() throws Exception {
@@ -108,4 +112,18 @@ public class CartRepository {
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }
+
+    public static List<CartAndCartItem> getCartAndCartItem() throws Exception {
+        List<Cart> cartList = getAllCart();
+        List<CartAndCartItem> cartAndCartItemList = new ArrayList<>();
+        for(int i = 0; i < cartList.size(); i++){
+            List<CartItems> cartItemsList = getCartItemsById(cartList.get(i).getCartId());
+            CartAndCartItem cartAndCartItem = new CartAndCartItem();
+            cartAndCartItem.setCart(cartList.get(i));
+            cartAndCartItem.setCartItemsList(cartItemsList);
+            cartAndCartItemList.add(cartAndCartItem);
+        }
+        return cartAndCartItemList;
+    }
+
 }

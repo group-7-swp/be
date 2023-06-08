@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Repository.CartRepository;
 import com.example.demo.model.Cart;
+import com.example.demo.model.CartAndCartItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,5 +33,12 @@ public class CartController {
     @DeleteMapping("/deleteCart")
     public ResponseEntity<String> deleteCart(@RequestParam int[] cartId) throws Exception {
         return CartRepository.deleteCart(cartId);
+    }
+
+    @GetMapping("/getCartAndCartItem")
+    public ResponseEntity<Object> getCartAndCartItem() throws Exception {
+        List<CartAndCartItem> cartAndCartItem = CartRepository.getCartAndCartItem();
+        if(cartAndCartItem.size()>0) return ResponseEntity.ok().body(cartAndCartItem);
+        else return ResponseEntity.badRequest().build();
     }
 }
