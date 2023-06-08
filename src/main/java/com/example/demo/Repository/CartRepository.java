@@ -126,5 +126,22 @@ public class CartRepository {
         return cartAndCartItemList;
     }
 
+    public static Cart getCartByUserUid(String userUid) throws Exception {
+        Cart cart = null;
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Select * from Cart c Join Users u on c.userId = u.userId where u.userUid = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, userUid);
+            ResultSet table = pst.executeQuery();
+            if (table.next()) {
+                cart = new Cart();
+                cart.setCartId(table.getInt("cartId"));
+                // Set other properties of the cart object from the result set
+            }
+        }
+        return cart;
+    }
+
 
 }
