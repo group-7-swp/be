@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.AddressRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.model.Address;
 import com.example.demo.model.Cart;
+import com.example.demo.model.CreateUser;
 import com.example.demo.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -40,8 +43,18 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<String> createUser (@RequestBody User user) throws Exception {
-        return UserRepository.createUser(user);
+    public ResponseEntity<Object> createUser (@RequestBody CreateUser createUser) throws Exception {
+        User user = new User(0, 0, createUser.getUserName(), createUser.getUserUid(), createUser.getEmail(), createUser.getPhoneNumber(), "");
+        try{
+            UserRepository.createUser(user);
+            int userId = UserRepository.getUserByUserUid(createUser.getUserUid()).getUserId();
+            Address address = new Address(userId, createUser.getAddress());
+            AddressRepository.createAddress(address);
+            return ResponseEntity.ok().body(createUser);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteUser")
