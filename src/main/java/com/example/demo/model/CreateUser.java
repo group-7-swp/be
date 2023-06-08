@@ -11,15 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Address {
-    private int addressId;
-    private int userId;
+public class CreateUser {
     private String address;
-    private Date dateCreate;
-    private Date dateUpdate;
-
-    public Address (int userId, String address){
-        this.address = address;
-        this.userId = userId;
-    }
+    private String userName;
+    private String userUid;
+    private String email;
+    private String phoneNumber;
 }
