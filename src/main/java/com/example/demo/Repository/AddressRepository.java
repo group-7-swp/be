@@ -110,19 +110,26 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Delete Fail");
     }
 
-    public static Address getAddressByUserUid(String userUid) throws Exception {
-        Address address = null;
+    public static List<Address> getAddressByUserUid(String userUid) throws Exception {
+        List<Address> addressList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
             String sql = "Select * From Address a Join Users u on a.userId = u.userId Where u.userUid = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setString(1, userUid);
             ResultSet table = pst.executeQuery();
-            if (table.next()) {
-                address = new Address();
-                address.setAddressId(table.getInt("addressId"));
+            if (table != null) {
+                while (table.next()) {
+                    Address address = new Address();
+                    address.setAddressId(table.getInt("addressId"));
+                    address.setAddress(table.getString("address"));
+                    address.setDateCreate(table.getDate("dateCreate"));
+                    address.setDateUpdate(table.getDate("dateUpdate"));
+                    addressList.add(address);
+                }
             }
         }
-        return address;
+        return addressList;
     }
+
 }

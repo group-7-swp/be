@@ -19,6 +19,13 @@ public class AddressController {
 
     }
 
+    @GetMapping("/getAddressByUserUid")
+    public ResponseEntity<Object> getAddressByUserUid(@RequestParam String userUid) throws Exception {
+        List<Address> addressList = AddressRepository.getAddressByUserUid(userUid);
+        if(addressList.size()>0) return ResponseEntity.ok().body(addressList);
+        else return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/getAddressById")
     public ResponseEntity<Object> getAddressById(@RequestParam int addressId) throws Exception {
         List<Address> addressList = AddressRepository.getAddressById(addressId);
