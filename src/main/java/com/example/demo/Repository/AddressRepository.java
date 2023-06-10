@@ -93,24 +93,50 @@ public class AddressRepository {
         return ResponseEntity.badRequest().body("Failed");
     }
 
+    public static  List<Address> getAddressByUserId(int userId) throws Exception {
+        List<Address> addressList = new ArrayList<>();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Select * From Address Where userId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, userId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    Address address = new Address();
+                    address.setAddressId(table.getInt("addressId"));
+                    address.setAddress(table.getString("address"));
+                    address.setDateCreate(table.getDate("dateCreate"));
+                    address.setDateUpdate(table.getDate("dateUpdate"));
+                    addressList.add(address);
+                }
+            }
+        }
+        return addressList;
+    }
+
     //Delete Category
     public static ResponseEntity<String> deleteAddress(int[] addressId) throws Exception {
-        Connection cn = DBUtils.makeConnection();
-        int count = 0;
-        if (cn!= null) {
-            for (int i = 0; i < addressId.length; i++) {
-                String sql = "Delete from dbo.Address where addressId = ?";
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, addressId[i]);
-                int row = pst.executeUpdate();
-                if(row > 0) count++;
+        int userId = getAddressById(addressId[0]).get(0).getUserId();
+        List<Address> addressList = getAddressByUserId(userId);
+        if(addressList.size()>1) {
+            Connection cn = DBUtils.makeConnection();
+            int count = 0;
+            if (cn != null) {
+                for (int i = 0; i < addressId.length; i++) {
+                    String sql = "Delete from dbo.Address where addressId = ?";
+                    PreparedStatement pst = cn.prepareStatement(sql);
+                    pst.setInt(1, addressId[i]);
+                    int row = pst.executeUpdate();
+                    if (row > 0) count++;
+                }
+                if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
             }
-            if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
         }
         return ResponseEntity.badRequest().body("Delete Fail");
     }
 
-    public static List<Address> getAddressByUserUid(String userUid) throws Exception {
+    public static  List<Address> getAddressByUserUid(String userUid) throws Exception {
         List<Address> addressList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
@@ -131,5 +157,4 @@ public class AddressRepository {
         }
         return addressList;
     }
-
 }
