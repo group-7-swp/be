@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Repository.CartItemsRepository;
 import com.example.demo.model.CartItems;
+import com.example.demo.model.ProductAndCartItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

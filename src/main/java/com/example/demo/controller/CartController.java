@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.CartItemsRepository;
 import com.example.demo.Repository.CartRepository;
 import com.example.demo.model.Cart;
 import com.example.demo.model.CartAndCartItem;
+import com.example.demo.model.CartAndCartItemAndProduct;
+import com.example.demo.model.ProductAndCartItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +42,13 @@ public class CartController {
     public ResponseEntity<Object> getCartAndCartItem() throws Exception {
         List<CartAndCartItem> cartAndCartItem = CartRepository.getCartAndCartItem();
         if(cartAndCartItem.size()>0) return ResponseEntity.ok().body(cartAndCartItem);
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/getCartProductByUserUid")
+    public ResponseEntity<Object> getCartProductByUserUid(@RequestParam String userUid) throws Exception {
+        CartAndCartItemAndProduct cartAndCartItemAndProduct = CartRepository.getCartProductByUserUid(userUid);
+        if(cartAndCartItemAndProduct != null) return ResponseEntity.ok().body(cartAndCartItemAndProduct);
         else return ResponseEntity.badRequest().build();
     }
 }

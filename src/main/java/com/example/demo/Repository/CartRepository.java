@@ -1,9 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
-import com.example.demo.model.Cart;
-import com.example.demo.model.CartAndCartItem;
-import com.example.demo.model.CartItems;
+import com.example.demo.model.*;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
@@ -27,7 +25,6 @@ public class CartRepository {
                     Cart cart = new Cart();
                     cart.setCartId(table.getInt("cartId"));
                     cart.setUserId(table.getInt("userId"));
-                    cart.setDateUpdate(table.getDate("dateUpdate"));
                     cartList.add(cart);
                 }
             }
@@ -48,7 +45,6 @@ public class CartRepository {
                     Cart cart = new Cart();
                     cart.setCartId(table.getInt("cartId"));
                     cart.setUserId(table.getInt("userId"));
-                    cart.setDateUpdate(table.getDate("dateUpdate"));
                     cartList.add(cart);
                 }
             }
@@ -69,7 +65,6 @@ public class CartRepository {
                     Cart cart = new Cart();
                     cart.setCartId(table.getInt("cartId"));
                     cart.setUserId(table.getInt("userId"));
-                    cart.setDateUpdate(table.getDate("dateUpdate"));
                     cartList.add(cart);
                 }
             }
@@ -82,11 +77,10 @@ public class CartRepository {
     public static ResponseEntity<String> createCart(Cart cart) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO Cart (userId, dateUpdate) VALUES (?, ?)";
+            String sql = "INSERT INTO Cart (userId) VALUES (?)";
 
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cart.getUserId());
-            pst.setString(2, DBUtils.getCurrentDate());
 
             int row = pst.executeUpdate();
             if (row > 0) {
@@ -137,10 +131,56 @@ public class CartRepository {
             if (table.next()) {
                 cart = new Cart();
                 cart.setCartId(table.getInt("cartId"));
+                cart.setUserId(table.getInt("userId"));
             }
         }
         return cart;
     }
 
+    public static List<ProductAndCartItem> getProductAndCartItem(int cartId) throws Exception {
+        List<ProductAndCartItem> productAndCartItemList = new ArrayList<>();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "select c.cartItemId, c.quantity, p.productId, p.productName, p.price, p.quantity as productQuantity, p.categoryId, p.description, p.status, p.image, p.dateCreate, p.dateUpdate " +
+                    "from CartItems c " +
+                    "left join Product p on p.productId = c.productId " +
+                    "where c.cartId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, cartId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                while (table.next()) {
+                    ProductAndCartItem productAndCartItem = new ProductAndCartItem();
+                    productAndCartItem.setCartItemId(table.getInt("cartItemId"));
+                    productAndCartItem.setQuantity(table.getInt("quantity"));
+
+                    Product product = new Product();
+                    product.setProductId(table.getInt("productId"));
+                    product.setProductName(table.getString("productName"));
+                    product.setPrice(table.getInt("price"));
+                    product.setQuantity(table.getInt("productQuantity"));
+                    product.setCategoryId(table.getInt("categoryId"));
+                    product.setStatus(table.getString("status"));
+                    product.setDescription(table.getString("description"));
+                    product.setImage(table.getString("image"));
+                    product.setDateCreate(table.getDate("dateCreate"));
+                    product.setDateUpdate(table.getDate("dateUpdate"));
+
+                    productAndCartItem.setProduct(product);
+                    productAndCartItemList.add(productAndCartItem);
+                }
+            }
+        }
+        return productAndCartItemList;
+    }
+
+    public static CartAndCartItemAndProduct getCartProductByUserUid(String userUid) throws Exception {
+        Cart cart = getCartByUserUid(userUid);
+        CartAndCartItemAndProduct cartAndCartItemAndProduct = new CartAndCartItemAndProduct();
+        List<ProductAndCartItem> productAndCartItemList= getProductAndCartItem(cart.getCartId());
+        cartAndCartItemAndProduct.setCart(cart);
+        cartAndCartItemAndProduct.setProductAndCartItemList(productAndCartItemList);
+        return cartAndCartItemAndProduct;
+    }
 
 }
