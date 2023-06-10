@@ -56,13 +56,13 @@ public class CartRepository {
         return cartList;
     }
 
-    public static List<Cart> getCartByUserId(int cartId) throws Exception {
+    public static List<Cart> getCartByUserId(int userId) throws Exception {
         List<Cart> cartList = new ArrayList<>();
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
             String sql = "SELECT * FROM Cart WHERE userId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartId);
+            pst.setInt(1, userId);
             ResultSet table = pst.executeQuery();
             if (table != null) {
                 while (table.next()) {

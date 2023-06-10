@@ -26,6 +26,7 @@ public class AddressController {
         else return ResponseEntity.badRequest().build();
     }
 
+
     @GetMapping("/getAddressById")
     public ResponseEntity<Object> getAddressById(@RequestParam int addressId) throws Exception {
         List<Address> addressList = AddressRepository.getAddressById(addressId);
