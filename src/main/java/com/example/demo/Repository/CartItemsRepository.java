@@ -28,7 +28,6 @@ public class CartItemsRepository {
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
-                    cartItems.setTotalPrice(table.getInt("totalPrice"));
                     cartItemsList.add(cartItems);
                 }
             }
@@ -51,7 +50,6 @@ public class CartItemsRepository {
                     cartItems.setCartId(table.getInt("cartId"));
                     cartItems.setProductId(table.getInt("productId"));
                     cartItems.setQuantity(table.getInt("quantity"));
-                    cartItems.setTotalPrice(table.getInt("totalPrice"));
                     cartItemsList.add(cartItems);
                 }
             }
@@ -63,7 +61,7 @@ public class CartItemsRepository {
     public static ResponseEntity<String> createCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO CartItems (cartId, productId, quantity, totalPrice) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO CartItems (cartId, productId, quantity) VALUES (?, ?, ?)";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cartItem.getCartId());
             pst.setInt(2, cartItem.getProductId());
