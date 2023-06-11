@@ -1,16 +1,17 @@
 package com.example.demo.model;
-
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Cart {
-    private int cartId;
-    private int userId;
+public class ProductAndCartItem {
+    private int cartItemId;
+    private int quantity;
+    private Product product;
 }
