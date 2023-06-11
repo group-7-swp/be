@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.Repository.CartRepository;
+import com.example.demo.Repository.UserRepository;
 import com.example.demo.model.Cart;
 import com.example.demo.model.CartAndCartItem;
+import com.example.demo.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,22 @@ public class CartController {
         if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
         else return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/getCartByUserId")
+    public ResponseEntity<Object> getCartByUserId(@RequestParam int userId) throws Exception {
+        List<Cart> cartList = CartRepository.getCartByUserId(userId);
+        if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
+        else return ResponseEntity.badRequest().build();
+    }
+    @GetMapping("/getCartByUserUid")
+    public ResponseEntity<Object> getCartByUserUid(@RequestParam String userUid) throws Exception {
+        Cart cart = CartRepository.getCartByUserUid(userUid);
+        if (cart.getCartId() != 0) {
+            return ResponseEntity.ok().body(cart);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    } //Chưa chắc lắm nên tạm để đây
 
     @PostMapping("/createCart")
     public ResponseEntity<String> createCart(@RequestBody Cart cart) throws Exception {

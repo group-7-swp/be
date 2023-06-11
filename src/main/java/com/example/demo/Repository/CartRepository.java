@@ -77,12 +77,27 @@ public class CartRepository {
         return cartList;
     }
 
+    public static Cart getCartByUserUid(String userUid) throws Exception {
+        Cart cart = null;
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "Select * from Cart c Join Users u on c.userId = u.userId where u.userUid = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setString(1, userUid);
+            ResultSet table = pst.executeQuery();
+            if (table.next()) {
+                cart = new Cart();
+                cart.setCartId(table.getInt("cartId"));
+            }
+        }
+        return cart;
+    }
 
     //Create a new cart
     public static ResponseEntity<String> createCart(Cart cart) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO Cart (userId, dateUpdate) VALUES (?, ?)";
+            String sql = "Insert into Cart (userId, dateUpdate) values (?, ?)";
 
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cart.getUserId());
@@ -125,22 +140,4 @@ public class CartRepository {
         }
         return cartAndCartItemList;
     }
-
-    public static Cart getCartByUserUid(String userUid) throws Exception {
-        Cart cart = null;
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Select * from Cart c Join Users u on c.userId = u.userId where u.userUid = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, userUid);
-            ResultSet table = pst.executeQuery();
-            if (table.next()) {
-                cart = new Cart();
-                cart.setCartId(table.getInt("cartId"));
-            }
-        }
-        return cart;
-    }
-
-
 }
