@@ -61,10 +61,10 @@ public class CartItemsRepository {
     public static ResponseEntity<String> createCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            CartItems cartItems = getCartItemsByCartIdAndProductId(cartItem.getCartId(), cartItem.getProductId());
-            if (cartItems != null){
-                cartItems.setQuantity(cartItems.getQuantity() + 1);
-                updateCartItems(cartItems);
+            CartItems newCartItem = getCartItemsByCartIdAndProductId(cartItem.getCartId(), cartItem.getProductId());
+            if (newCartItem.getCartId() != 0){
+                newCartItem.setQuantity(newCartItem.getQuantity() + 1);
+                updateCartItems(newCartItem);
                 return ResponseEntity.ok().body("Create successful");
             }
             else {
@@ -140,8 +140,7 @@ public class CartItemsRepository {
             pst.setInt(1, cartId);
             pst.setInt(2, productId);
             ResultSet table = pst.executeQuery();
-            if (table != null) {
-                table.next();
+            if (table != null && table.next()) {
                 cartItems.setCartItemId(table.getInt("cartItemId"));
                 cartItems.setCartId(table.getInt("cartId"));
                 cartItems.setProductId(table.getInt("productId"));
