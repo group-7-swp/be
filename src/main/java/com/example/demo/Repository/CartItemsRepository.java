@@ -61,14 +61,22 @@ public class CartItemsRepository {
     public static ResponseEntity<String> createCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "INSERT INTO CartItems (cartId, productId, quantity) VALUES (?, ?, ?)";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, cartItem.getCartId());
-            pst.setInt(2, cartItem.getProductId());
-            pst.setInt(3, cartItem.getQuantity());
-            int row = pst.executeUpdate();
-            if (row > 0) {
+            CartItems cartItems = getCartItemsByCartIdAndProductId(cartItem.getCartId(), cartItem.getProductId());
+            if (cartItems != null){
+                cartItems.setQuantity(cartItems.getQuantity() + 1);
+                updateCartItems(cartItems);
                 return ResponseEntity.ok().body("Create successful");
+            }
+            else {
+                String sql = "INSERT INTO CartItems (cartId, productId, quantity) VALUES (?, ?, ?)";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, cartItem.getCartId());
+                pst.setInt(2, cartItem.getProductId());
+                pst.setInt(3, cartItem.getQuantity());
+                int row = pst.executeUpdate();
+                if (row > 0) {
+                    return ResponseEntity.ok().body("Create successful");
+                }
             }
         }
         return ResponseEntity.badRequest().body("Create failed");
@@ -121,5 +129,25 @@ public class CartItemsRepository {
             }
         }
         return count;
+    }
+
+    public static CartItems getCartItemsByCartIdAndProductId(int cartId, int productId) throws Exception {
+        CartItems cartItems = new CartItems();
+        Connection cn = DBUtils.makeConnection();
+        if (cn != null) {
+            String sql = "SELECT * FROM CartItems WHERE cartId = ? and productId = ?";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            pst.setInt(1, cartId);
+            pst.setInt(2, productId);
+            ResultSet table = pst.executeQuery();
+            if (table != null) {
+                table.next();
+                cartItems.setCartItemId(table.getInt("cartItemId"));
+                cartItems.setCartId(table.getInt("cartId"));
+                cartItems.setProductId(table.getInt("productId"));
+                cartItems.setQuantity(table.getInt("quantity"));
+            }
+        }
+        return cartItems;
     }
 }

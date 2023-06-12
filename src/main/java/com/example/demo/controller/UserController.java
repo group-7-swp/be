@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Repository.AddressRepository;
+import com.example.demo.Repository.CartRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.model.Address;
 import com.example.demo.model.Cart;
@@ -50,6 +51,8 @@ public class UserController {
             int userId = UserRepository.getUserByUserUid(createUser.getUserUid()).getUserId();
             Address address = new Address(userId, createUser.getAddress());
             AddressRepository.createAddress(address);
+            Cart cart = new Cart(0, userId);
+            CartRepository.createCart(cart);
             return ResponseEntity.ok().body(createUser);
         } catch (SQLException e){
             e.printStackTrace();
