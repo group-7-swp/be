@@ -66,7 +66,6 @@ public class CartItemsRepository {
             pst.setInt(1, cartItem.getCartId());
             pst.setInt(2, cartItem.getProductId());
             pst.setInt(3, cartItem.getQuantity());
-            pst.setInt(4, cartItem.getTotalPrice());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Create successful");
@@ -79,11 +78,10 @@ public class CartItemsRepository {
     public static ResponseEntity<String> updateCartItems(CartItems cartItem) throws Exception {
         Connection cn = DBUtils.makeConnection();
         if (cn != null) {
-            String sql = "UPDATE CartItems SET quantity = ?, totalPrice = ? WHERE cartItemId = ?";
+            String sql = "UPDATE CartItems SET quantity = ? WHERE cartItemId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, cartItem.getQuantity());
-            pst.setDouble(2, cartItem.getTotalPrice());
-            pst.setInt(3, cartItem.getCartItemId());
+            pst.setInt(2, cartItem.getCartItemId());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Update successful");
