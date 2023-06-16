@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.PaymentRepository;
 import com.example.demo.model.Product;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class ProductController {
 
     @GetMapping("/getProductById")
     public ResponseEntity<Object> getProductById(@RequestParam int productId) throws Exception {
-        List<Product> productList = ProductRepository.getProductById(productId);
-        if(productList.size()>0) return ResponseEntity.ok().body(productList.get(0));
+        Product product = ProductRepository.getProductById(productId);
+        if(product != null) return ResponseEntity.ok().body(product);
         else return ResponseEntity.badRequest().build();
     }
 
@@ -56,17 +57,20 @@ public class ProductController {
 
     @PostMapping("/createProduct")
     public ResponseEntity<String> createProduct(@RequestBody Product product) throws Exception {
-        return ProductRepository.createProduct(product);
+        if(ProductRepository.createProduct(product)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteProduct")
     public ResponseEntity<String>  deleteProduct(@RequestParam int[] productId) throws Exception {
-        return ProductRepository.deleteProduct(productId);
+        if(ProductRepository.deleteProduct(productId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateProduct")
     public ResponseEntity<String>  updateProduct(@RequestBody Product product) throws Exception {
-        return ProductRepository.updateProduct(product);
+        if(ProductRepository.updateProduct(product)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/filterByCategory")

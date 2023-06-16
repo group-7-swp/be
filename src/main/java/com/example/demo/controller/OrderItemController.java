@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.DeliveryRepository;
 import com.example.demo.Repository.OrderItemRepository;
 import com.example.demo.model.OrderItem;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class OrderItemController {
 
     @GetMapping("/getOrderItemById")
     public ResponseEntity<Object> getOrderItemById(int orderItemId) throws Exception {
-        List<OrderItem> orderList = OrderItemRepository.getOrderItemById(orderItemId);
-        if(orderList.size()>0) return ResponseEntity.ok().body(orderList.get(0));
+        OrderItem order = OrderItemRepository.getOrderItemById(orderItemId);
+        if(order != null) return ResponseEntity.ok().body(order);
         else return ResponseEntity.badRequest().build();
     }
 
@@ -33,16 +34,19 @@ public class OrderItemController {
 
     @DeleteMapping("/deleteOrderItem")
     public ResponseEntity<String> deleteOrderItem(@RequestParam int[] orderItemId) throws Exception {
-        return OrderItemRepository.deleteOrderItem(orderItemId);
+        if(OrderItemRepository.deleteOrderItem(orderItemId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createOrderItem")
     public ResponseEntity<String> createOrderItem(@RequestBody OrderItem orderItem) throws Exception {
-        return OrderItemRepository.createOrderItem(orderItem);
+        if(OrderItemRepository.createOrderItem(orderItem)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateOrderItem")
     public ResponseEntity<String> updateOrderItem(@RequestBody OrderItem orderItem) throws Exception {
-        return OrderItemRepository.updateOrderItem(orderItem);
+        if(OrderItemRepository.updateOrderItem(orderItem)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

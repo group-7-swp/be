@@ -39,21 +39,20 @@ public class CartController {
     @GetMapping("/getCartByUserUid")
     public ResponseEntity<Object> getCartByUserUid(@RequestParam String userUid) throws Exception {
         Cart cart = CartRepository.getCartByUserUid(userUid);
-        if (cart.getCartId() != 0) {
-            return ResponseEntity.ok().body(cart);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        if (cart.getCartId() != 0) return ResponseEntity.ok().body(cart);
+        else return ResponseEntity.badRequest().build();
     } //Chưa chắc lắm nên tạm để đây
 
     @PostMapping("/createCart")
-    public ResponseEntity<String> createCart(@RequestBody Cart cart) throws Exception {
-        return CartRepository.createCart(cart);
+    public ResponseEntity<Object> createCart(@RequestBody Cart cart) throws Exception {
+        if(CartRepository.createCart(cart)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteCart")
-    public ResponseEntity<String> deleteCart(@RequestParam int[] cartId) throws Exception {
-        return CartRepository.deleteCart(cartId);
+    public ResponseEntity<Object> deleteCart(@RequestParam int[] cartId) throws Exception {
+        if(CartRepository.deleteCart(cartId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/getCartAndCartItem")

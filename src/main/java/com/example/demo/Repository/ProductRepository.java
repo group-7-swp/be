@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,26 +18,30 @@ import java.util.regex.Pattern;
 public class ProductRepository {
     public static List<Product> getProduct(String sql) throws Exception {
         List<Product> productList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            PreparedStatement pst = cn.prepareStatement(sql);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    Product product = new Product();
-                    product.setProductId(table.getInt("productId"));
-                    product.setProductName(table.getString("productName"));
-                    product.setPrice(table.getInt("price"));
-                    product.setQuantity(table.getInt("quantity"));
-                    product.setCategoryId(table.getInt("categoryId"));
-                    product.setStatus(table.getString("status"));
-                    product.setDescription(table.getString("description"));
-                    product.setImage(table.getString("image"));
-                    product.setDateCreate(table.getDate("dateCreate"));
-                    product.setDateUpdate(table.getDate("dateUpdate"));
-                    productList.add(product);
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Product product = new Product();
+                        product.setProductId(table.getInt("productId"));
+                        product.setProductName(table.getString("productName"));
+                        product.setPrice(table.getInt("price"));
+                        product.setQuantity(table.getInt("quantity"));
+                        product.setCategoryId(table.getInt("categoryId"));
+                        product.setStatus(table.getString("status"));
+                        product.setDescription(table.getString("description"));
+                        product.setImage(table.getString("image"));
+                        product.setDateCreate(table.getDate("dateCreate"));
+                        product.setDateUpdate(table.getDate("dateUpdate"));
+                        productList.add(product);
+                    }
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return productList;
     }
@@ -55,26 +60,30 @@ public class ProductRepository {
     }
 
     //Filter product by id
-    public static List<Product> getProductById(int productId) throws Exception {
+    public static Product getProductById(int productId) throws Exception {
         String sql = "select * from dbo.Product where productId = '" + productId + "'";
-        List<Product> productList = getProduct(sql);
-        return productList;
+        Product product = getProduct(sql).get(0);
+        return product;
     }
 
     public static int getCategoryId(String categoryName) throws Exception {
         List<Product> productList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
         int categoryId = 0;
-        if (cn != null) {
-            String sql = "Select * from dbo.Category where categoryName = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, categoryName);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    categoryId = table.getInt("categoryId");
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * from dbo.Category where categoryName = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, categoryName);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        categoryId = table.getInt("categoryId");
+                    }
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return categoryId;
     }
@@ -137,71 +146,82 @@ public class ProductRepository {
     }
 
     //Add new product
-    public static ResponseEntity<String> createProduct(Product product) throws Exception {
+    public static boolean createProduct(Product product) throws Exception {
         String dateCreate = DBUtils.getCurrentDate();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "SET ANSI_WARNINGS OFF;" +
-                    "INSERT INTO Product(productName, price, quantity, categoryId, status, description, image, dateCreate) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                    "SET ANSI_WARNINGS ON";
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "SET ANSI_WARNINGS OFF;" +
+                        "INSERT INTO Product(productName, price, quantity, categoryId, status, description, image, dateCreate) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
+                        "SET ANSI_WARNINGS ON";
 
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, product.getProductName());
-            pst.setInt(2, product.getPrice());
-            pst.setInt(3, product.getQuantity());
-            pst.setInt(4, product.getCategoryId());
-            pst.setString(5, product.getStatus());
-            pst.setString(6, product.getDescription());
-            pst.setString(7, product.getImage());
-            pst.setString(8, dateCreate);
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Create successful");
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, product.getProductName());
+                pst.setInt(2, product.getPrice());
+                pst.setInt(3, product.getQuantity());
+                pst.setInt(4, product.getCategoryId());
+                pst.setString(5, product.getStatus());
+                pst.setString(6, product.getDescription());
+                pst.setString(7, product.getImage());
+                pst.setString(8, dateCreate);
+                int row = pst.executeUpdate();
+                if (row > 0) {
+                    return true;
+                }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return false;
     }
 
     //Delete existing product by id
-    public static ResponseEntity<String> deleteProduct(int[] productId) throws Exception {
+    public static boolean deleteProduct(int[] productId) throws Exception {
         String sql = "Delete from dbo.Product where productId = ?";
-        Connection cn = DBUtils.makeConnection();
-        int count = 0;
-        if (cn != null) {
-            for (int i = 0; i<productId.length; i++) {
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, productId[i]);
-                int row = pst.executeUpdate();
-                if (row > 0) count++;
+        try {
+            Connection cn = DBUtils.makeConnection();
+            int count = 0;
+            if (cn != null) {
+                for (int i = 0; i < productId.length; i++) {
+                    PreparedStatement pst = cn.prepareStatement(sql);
+                    pst.setInt(1, productId[i]);
+                    int row = pst.executeUpdate();
+                    if (row > 0) count++;
+                }
+                if (count > 0) return true;
             }
-            if (count > 0)return ResponseEntity.ok().body("Delete successful");
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return false;
     }
 
     //Update existing product by id
-    public static ResponseEntity<String> updateProduct(Product product) throws Exception {
+    public static boolean updateProduct(Product product) throws Exception {
         String dateUpdate = DBUtils.getCurrentDate();
-
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Update dbo.Product set productName = ?, price = ?, quantity = ?, categoryId = ?, status = ?, description = ?, image = ?, dateUpdate = ? where productId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, product.getProductName());
-            pst.setInt(2, product.getPrice());
-            pst.setInt(3, product.getQuantity());
-            pst.setInt(4, product.getCategoryId());
-            pst.setString(5, product.getStatus());
-            pst.setString(6, product.getDescription());
-            pst.setString(7, product.getImage());
-            pst.setString(8, dateUpdate);
-            pst.setInt(9, product.getProductId());
-            int row = pst.executeUpdate();
-            if (row > 0) {
-                return ResponseEntity.ok().body("Update successful");
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Update dbo.Product set productName = ?, price = ?, quantity = ?, categoryId = ?, status = ?, description = ?, image = ?, dateUpdate = ? where productId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, product.getProductName());
+                pst.setInt(2, product.getPrice());
+                pst.setInt(3, product.getQuantity());
+                pst.setInt(4, product.getCategoryId());
+                pst.setString(5, product.getStatus());
+                pst.setString(6, product.getDescription());
+                pst.setString(7, product.getImage());
+                pst.setString(8, dateUpdate);
+                pst.setInt(9, product.getProductId());
+                int row = pst.executeUpdate();
+                if (row > 0) {
+                    return true;
+                }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return false;
     }
 }

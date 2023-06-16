@@ -21,23 +21,26 @@ public class OrderController {
 
     @GetMapping("/getOrderById")
     public ResponseEntity<Object> getOrderById(int orderItemId) throws Exception {
-        List<Order> orderList = OrderRepository.getOrderById(orderItemId);
-        if(orderList.size()>0) return ResponseEntity.ok().body(orderList.get(0));
+        Order order = OrderRepository.getOrderById(orderItemId);
+        if(order != null) return ResponseEntity.ok().body(order);
         else return ResponseEntity.badRequest().build();
     }
     @DeleteMapping("/deleteOrder")
     public ResponseEntity<String> deleteOrder(@RequestParam int[] orderItemId) throws Exception {
-        return OrderRepository.deleteOrder(orderItemId);
+        if(OrderRepository.deleteOrder(orderItemId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createOrder")
     public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
-        return OrderRepository.createOrder(order);
+        if(OrderRepository.createOrder(order)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateOrder")
     public ResponseEntity<String> updateOrder(@RequestBody Order order) throws Exception {
-        return OrderRepository.updateOrder(order);
+        if(OrderRepository.updateOrder(order)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/getOrderAndOrderItem")

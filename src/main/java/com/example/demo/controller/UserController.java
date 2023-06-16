@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Repository.AddressRepository;
 import com.example.demo.Repository.CartRepository;
+import com.example.demo.Repository.PaymentRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.model.Address;
 import com.example.demo.model.Cart;
@@ -62,11 +63,13 @@ public class UserController {
 
     @DeleteMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(@RequestParam int[] userId) throws Exception {
-        return UserRepository.deleteUser(userId);
+        if(UserRepository.deleteUser(userId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateUser")
     public ResponseEntity<String> updateUser(@RequestBody User user) throws Exception {
-        return UserRepository.updateUser(user);
+        if(UserRepository.updateUser(user)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

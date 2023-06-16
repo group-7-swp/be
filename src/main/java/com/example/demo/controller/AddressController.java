@@ -29,23 +29,26 @@ public class AddressController {
 
     @GetMapping("/getAddressById")
     public ResponseEntity<Object> getAddressById(@RequestParam int addressId) throws Exception {
-        List<Address> addressList = AddressRepository.getAddressById(addressId);
-        if(addressList.size()>0) return ResponseEntity.ok().body(addressList.get(0));
+        Address address = AddressRepository.getAddressById(addressId);
+        if(address != null) return ResponseEntity.ok().body(address);
         else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createAddress")
-    public ResponseEntity<String> createAddress(@RequestBody Address address) throws Exception {
-        return AddressRepository.createAddress(address);
+    public ResponseEntity<Object> createAddress(@RequestBody Address address) throws Exception {
+        if (AddressRepository.createAddress(address)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteAddress")
     public ResponseEntity<String> deleteAddress(@RequestParam int[] addressId) throws Exception {
-        return AddressRepository.deleteAddress(addressId);
+        if (AddressRepository.deleteAddress(addressId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateAddress")
     public ResponseEntity<String> updateAddress(@RequestBody Address adress) throws Exception {
-        return AddressRepository.updateAddress(adress);
+        if (AddressRepository.updateAddress(adress)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.Repository.AddressRepository;
+import com.example.demo.Repository.DeliveryRepository;
 import com.example.demo.Repository.PaymentRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.model.Address;
@@ -34,16 +35,19 @@ public class PaymentController {
 
     @PostMapping("/createPayment")
     public ResponseEntity<String> createPayment(@RequestBody Payment payment) throws Exception {
-        return PaymentRepository.createPayment(payment);
+        if(PaymentRepository.createPayment(payment)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updatePayment")
     public ResponseEntity<String> updatePayment(@RequestBody Payment payment) throws Exception {
-        return PaymentRepository.updatePayment(payment);
+        if(PaymentRepository.updatePayment(payment)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deletePayment")
     public ResponseEntity<String> deletePayment(@RequestParam int[] paymentId) throws Exception {
-        return PaymentRepository.deletePayment(paymentId);
+        if(PaymentRepository.deletePayment(paymentId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

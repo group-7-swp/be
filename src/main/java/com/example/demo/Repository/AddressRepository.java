@@ -4,156 +4,181 @@ import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Address;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddressRepository {
     public static List<Address> getAllAddress() throws Exception {
         List<Address> addressList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null){
-            String sql = "Select * from dbo.Address";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    Address address = new Address();
-                    address.setAddressId(table.getInt("addressId"));
-                    address.setUserId(table.getInt("userId"));
-                    address.setAddress(table.getString("address"));
-                    address.setDateCreate(table.getDate("dateCreate"));
-                    address.setDateUpdate(table.getDate("dateUpdate"));
-                    addressList.add(address);
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * from dbo.Address";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Address address = new Address();
+                        address.setAddressId(table.getInt("addressId"));
+                        address.setUserId(table.getInt("userId"));
+                        address.setAddress(table.getString("address"));
+                        address.setDateCreate(table.getDate("dateCreate"));
+                        address.setDateUpdate(table.getDate("dateUpdate"));
+                        addressList.add(address);
+                    }
                 }
             }
-        } return addressList;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return addressList;
     }
 
-    public static List<Address> getAddressById(int addressId) throws Exception {
-        List<Address> addressList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null){
-            String sql = "Select * from dbo.Address where addressId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, addressId);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    Address address = new Address();
-                    address.setAddressId(table.getInt("addressId"));
-                    address.setUserId(table.getInt("userId"));
-                    address.setAddress(table.getString("address"));
-                    address.setDateCreate(table.getDate("dateCreate"));
-                    address.setDateUpdate(table.getDate("dateUpdate"));
-                    addressList.add(address);
+    public static Address getAddressById(int addressId) throws Exception {
+        Address address = new Address();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * from dbo.Address where addressId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, addressId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        address.setAddressId(table.getInt("addressId"));
+                        address.setUserId(table.getInt("userId"));
+                        address.setAddress(table.getString("address"));
+                        address.setDateCreate(table.getDate("dateCreate"));
+                        address.setDateUpdate(table.getDate("dateUpdate"));
+                    }
                 }
             }
-        } return addressList;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return address;
     }
 
     //Create new Category
-    public static ResponseEntity<String> createAddress(Address address) throws Exception {
+    public static boolean createAddress(Address address) throws Exception {
         Address category = new Address();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "INSERT INTO dbo.Address (userId, address, dateCreate) VALUES (?,?,?)";
-            PreparedStatement pst = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, address.getUserId());
-            pst.setString(2, address.getAddress());
-            pst.setString(3, DBUtils.getCurrentDate());
-            int row = pst.executeUpdate();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "INSERT INTO dbo.Address (userId, address, dateCreate) VALUES (?,?,?)";
+                PreparedStatement pst = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pst.setInt(1, address.getUserId());
+                pst.setString(2, address.getAddress());
+                pst.setString(3, DBUtils.getCurrentDate());
+                int row = pst.executeUpdate();
 
-            if (row > 0) {
-                return ResponseEntity.ok().body("Create successful");
+                if (row > 0) {
+                    return true;
+                }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return false;
     }
 
     //Update Category
-    public static ResponseEntity<String> updateAddress(Address address) throws Exception {
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Update dbo.Address Set address = ?, dateUpdate = ? WHERE addressId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, address.getAddress());
-            pst.setString(2, DBUtils.getCurrentDate());
-            pst.setInt(3, address.getAddressId());
-            pst.executeUpdate();
-            int row = pst.executeUpdate();
+    public static boolean updateAddress(Address address) throws Exception {
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Update dbo.Address Set address = ?, dateUpdate = ? WHERE addressId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, address.getAddress());
+                pst.setString(2, DBUtils.getCurrentDate());
+                pst.setInt(3, address.getAddressId());
+                pst.executeUpdate();
+                int row = pst.executeUpdate();
 
-            if (row > 0) {
-                return ResponseEntity.ok().body("Update successful");
+                if (row > 0) {
+                    return true;
+                }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Failed");
+        return false;
     }
 
     public static  List<Address> getAddressByUserId(int userId) throws Exception {
         List<Address> addressList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Select * From Address Where userId = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setInt(1, userId);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    Address address = new Address();
-                    address.setAddressId(table.getInt("addressId"));
-                    address.setAddress(table.getString("address"));
-                    address.setDateCreate(table.getDate("dateCreate"));
-                    address.setDateUpdate(table.getDate("dateUpdate"));
-                    addressList.add(address);
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * From Address Where userId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, userId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Address address = new Address();
+                        address.setAddressId(table.getInt("addressId"));
+                        address.setAddress(table.getString("address"));
+                        address.setDateCreate(table.getDate("dateCreate"));
+                        address.setDateUpdate(table.getDate("dateUpdate"));
+                        addressList.add(address);
+                    }
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return addressList;
     }
 
     //Delete Category
-    public static ResponseEntity<String> deleteAddress(int[] addressId) throws Exception {
-        int userId = getAddressById(addressId[0]).get(0).getUserId();
+    public static boolean deleteAddress(int[] addressId) throws Exception {
+        int userId = getAddressById(addressId[0]).getUserId();
         List<Address> addressList = getAddressByUserId(userId);
-        if(addressList.size()>1) {
-            Connection cn = DBUtils.makeConnection();
-            int count = 0;
-            if (cn != null) {
-                for (int i = 0; i < addressId.length; i++) {
-                    String sql = "Delete from dbo.Address where addressId = ?";
-                    PreparedStatement pst = cn.prepareStatement(sql);
-                    pst.setInt(1, addressId[i]);
-                    int row = pst.executeUpdate();
-                    if (row > 0) count++;
+        try {
+            if (addressList.size() > 1) {
+                Connection cn = DBUtils.makeConnection();
+                int count = 0;
+                if (cn != null) {
+                    for (int i = 0; i < addressId.length; i++) {
+                        String sql = "Delete from dbo.Address where addressId = ?";
+                        PreparedStatement pst = cn.prepareStatement(sql);
+                        pst.setInt(1, addressId[i]);
+                        int row = pst.executeUpdate();
+                        if (row > 0) count++;
+                    }
+                    if (count > 0) return true;
                 }
-                if (count > 0) return ResponseEntity.ok().body("Delete Successfully");
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return ResponseEntity.badRequest().body("Delete Fail");
+        return false;
     }
 
     public static  List<Address> getAddressByUserUid(String userUid) throws Exception {
         List<Address> addressList = new ArrayList<>();
-        Connection cn = DBUtils.makeConnection();
-        if (cn != null) {
-            String sql = "Select * From Address a Join Users u on a.userId = u.userId Where u.userUid = ?";
-            PreparedStatement pst = cn.prepareStatement(sql);
-            pst.setString(1, userUid);
-            ResultSet table = pst.executeQuery();
-            if (table != null) {
-                while (table.next()) {
-                    Address address = new Address();
-                    address.setAddressId(table.getInt("addressId"));
-                    address.setAddress(table.getString("address"));
-                    address.setDateCreate(table.getDate("dateCreate"));
-                    address.setDateUpdate(table.getDate("dateUpdate"));
-                    addressList.add(address);
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * From Address a Join Users u on a.userId = u.userId Where u.userUid = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, userUid);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Address address = new Address();
+                        address.setAddressId(table.getInt("addressId"));
+                        address.setAddress(table.getString("address"));
+                        address.setDateCreate(table.getDate("dateCreate"));
+                        address.setDateUpdate(table.getDate("dateUpdate"));
+                        addressList.add(address);
+                    }
                 }
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return addressList;
     }

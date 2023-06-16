@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.AddressRepository;
 import com.example.demo.Repository.CategoryRepository;
 import com.example.demo.model.Category;
 import com.example.demo.model.CategoryAndProduct;
@@ -37,15 +38,18 @@ public class CategoryController {
 
     @PostMapping("/createCategory")
     public ResponseEntity<String> createCategory(@RequestBody Category category) throws Exception {
-        return CategoryRepository.createCategory(category);
+        if (CategoryRepository.createCategory(category)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
     @PatchMapping("/updateCategory")
     public ResponseEntity<String> updateCategory(@RequestBody Category category) throws Exception {
-        return CategoryRepository.updateCategory(category);
+        if (CategoryRepository.updateCategory(category)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
     @DeleteMapping("/deleteCategory")
     public ResponseEntity<String> deleteCategory(@RequestParam int[] categoryId) throws Exception {
-        return CategoryRepository.deleteCategory(categoryId);
+        if (CategoryRepository.deleteCategory(categoryId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/getCategoryAndProduct")

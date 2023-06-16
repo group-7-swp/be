@@ -31,16 +31,19 @@ public class DeliveryController {
 
     @PostMapping("/createDelivery")
     public ResponseEntity<String> createDelivery(@RequestBody Delivery delivery) throws Exception {
-        return DeliveryRepository.createDelivery(delivery);
+        if(DeliveryRepository.createDelivery(delivery)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateDelivery")
     public ResponseEntity<String> updateDelivery(@RequestBody Delivery delivery) throws Exception {
-        return DeliveryRepository.updateDelivery(delivery);
+        if(DeliveryRepository.updateDelivery(delivery)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteDelivery")
     public ResponseEntity<String> deleteDelivery(@RequestParam int[] deliveryId) throws Exception {
-        return DeliveryRepository.deleteDelivery(deliveryId);
+        if(DeliveryRepository.deleteDelivery(deliveryId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

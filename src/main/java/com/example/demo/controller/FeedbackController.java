@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Repository.DeliveryRepository;
 import com.example.demo.Repository.FeedbackRepository;
 import com.example.demo.model.Feedback;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +27,19 @@ public class FeedbackController {
 
     @PostMapping("/createFeedback")
     public ResponseEntity<String> createFeedback(@RequestBody Feedback feedback) throws Exception {
-        return FeedbackRepository.createFeedback(feedback);
+        if(FeedbackRepository.createFeedback(feedback)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteFeedback")
     public ResponseEntity<String> deleteFeedback(@RequestParam int[] feedbackId) throws Exception {
-        return FeedbackRepository.deleteFeedback(feedbackId);
+        if(FeedbackRepository.deleteFeedback(feedbackId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateFeedback")
     public ResponseEntity<String> updateFeedback(@RequestBody Feedback feedback) throws Exception {
-        return FeedbackRepository.updateFeedback(feedback);
+        if(FeedbackRepository.updateFeedback(feedback)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }

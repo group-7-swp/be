@@ -20,24 +20,27 @@ public class CartItemController {
 
     @GetMapping("/getCartItemsById")
     public ResponseEntity<Object> getCartItemsById(@RequestParam int cartItemId) throws Exception {
-        List<CartItems> cartList = CartItemsRepository.getCartItemsById(cartItemId);
-        if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
+        CartItems cartItems = CartItemsRepository.getCartItemsById(cartItemId);
+        if(cartItems != null) return ResponseEntity.ok().body(cartItems);
         else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createCartItems")
-    public ResponseEntity<String> createCartItems(@RequestBody CartItems cartItems) throws Exception {
-        return CartItemsRepository.createCartItems(cartItems);
+    public ResponseEntity<Object> createCartItems(@RequestBody CartItems cartItems) throws Exception {
+        if(CartItemsRepository.createCartItems(cartItems)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateCartItems")
-    public ResponseEntity<String> updateCartItems(@RequestBody CartItems cartItems) throws Exception {
-        return CartItemsRepository.updateCartItems(cartItems);
+    public ResponseEntity<Object> updateCartItems(@RequestBody CartItems cartItems) throws Exception {
+        if(CartItemsRepository.updateCartItems(cartItems)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteCartItems")
-    public ResponseEntity<String> deleteCartItem(@RequestParam int[] cartItemId) throws Exception {
-        return CartItemsRepository.deleteCartItem(cartItemId);
+    public ResponseEntity<Object> deleteCartItem(@RequestParam int[] cartItemId) throws Exception {
+        if(CartItemsRepository.deleteCartItem(cartItemId)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/countCartItems")
