@@ -19,6 +19,5 @@ public class Order {
     private int deliveryId;
     private String status;
     private String note;
-    private int totalPayment;
     private Date paymentDate;
 }
