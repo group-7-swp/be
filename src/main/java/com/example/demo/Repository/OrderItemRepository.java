@@ -27,7 +27,6 @@ public class OrderItemRepository {
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
-                    orderItem.setTotalPrice(table.getInt("totalPrice"));
                     orderItemList.add(orderItem);
                 }
             }
@@ -51,7 +50,6 @@ public class OrderItemRepository {
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
-                    orderItem.setTotalPrice(table.getInt("totalPrice"));
                     orderItemList.add(orderItem);
                 }
             }
@@ -74,7 +72,6 @@ public class OrderItemRepository {
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
-                    orderItem.setTotalPrice(table.getInt("totalPrice"));
                     orderItemList.add(orderItem);
                 }
             }
@@ -99,7 +96,6 @@ public class OrderItemRepository {
                     orderItem.setOrderId(table.getInt("orderId"));
                     orderItem.setProductId(table.getInt("productId"));
                     orderItem.setQuantity(table.getInt("quantity"));
-                    orderItem.setTotalPrice(table.getInt("totalPrice"));
                     orderItemList.add(orderItem);
                 }
             }
@@ -134,7 +130,6 @@ public class OrderItemRepository {
                 pst.setInt(1, orderItem.getOrderId());
                 pst.setInt(2, orderItem.getProductId());
                 pst.setInt(3, orderItem.getQuantity());
-                pst.setInt(4, orderItem.getTotalPrice());
                 int row = pst.executeUpdate();
                 if (row > 0) {
                     return ResponseEntity.ok().body("Create successful");
@@ -151,8 +146,7 @@ public class OrderItemRepository {
             String sql = "Update dbo.OrderItems set quantity = ?, totalPrice = ? where orderItemsId = ?";
             PreparedStatement pst = cn.prepareStatement(sql);
             pst.setInt(1, orderItem.getQuantity());
-            pst.setInt(2, orderItem.getTotalPrice());
-            pst.setInt(3, orderItem.getOrderItemId());
+            pst.setInt(2, orderItem.getOrderItemId());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Update successful");
