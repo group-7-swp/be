@@ -32,7 +32,6 @@ public class OrderRepository {
                     order.setDeliveryId(table.getInt("deliveryId"));
                     order.setStatus(table.getString("status"));
                     order.setNote(table.getString("note"));
-                    order.setTotalPayment(table.getInt("totalPayment"));
                     order.setPaymentDate(table.getDate("paymentDate"));
                     orderList.add(order);
                 }
@@ -60,7 +59,6 @@ public class OrderRepository {
                     order.setDeliveryId(table.getInt("deliveryId"));
                     order.setStatus(table.getString("status"));
                     order.setNote(table.getString("note"));
-                    order.setTotalPayment(table.getInt("totalPayment"));
                     order.setPaymentDate(table.getDate("paymentDate"));
                     orderList.add(order);
                 }
@@ -99,7 +97,6 @@ public class OrderRepository {
             pst.setInt(4, Order.getDeliveryId());
             pst.setString(5, Order.getStatus());
             pst.setString(6, Order.getNote());
-            pst.setInt(7, Order.getTotalPayment());
             //pst.setString(8, DBUtils.getCurrentDate());
 
             int row = pst.executeUpdate();
@@ -121,9 +118,8 @@ public class OrderRepository {
             pst.setInt(2, Order.getDeliveryId());
             pst.setString(3, Order.getStatus());
             pst.setString(4, Order.getNote());
-            pst.setInt(5, Order.getTotalPayment());
-            pst.setString(6, Order.getPaymentDate().toString());
-            pst.setInt(7, Order.getOrderId());
+            pst.setString(5, Order.getPaymentDate().toString());
+            pst.setInt(6, Order.getOrderId());
             int row = pst.executeUpdate();
             if (row > 0) {
                 return ResponseEntity.ok().body("Update successful");
