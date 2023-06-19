@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.OrderRepository;
-import com.example.demo.model.Order;
-import com.example.demo.model.OrderAndOrderItem;
+import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.Repository.*;
+import com.example.demo.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,27 +26,39 @@ public class OrderController {
         else return ResponseEntity.badRequest().build();
     }
     @DeleteMapping("/deleteOrder")
-    public ResponseEntity<String> deleteOrder(@RequestParam int[] orderItemId) throws Exception {
+    public ResponseEntity<Object> deleteOrder(@RequestParam int[] orderItemId) throws Exception {
         if(OrderRepository.deleteOrder(orderItemId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/createOrder")
-    public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
+    public ResponseEntity<Object> createOrder(@RequestBody Order order) throws Exception {
         if(OrderRepository.createOrder(order)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateOrder")
-    public ResponseEntity<String> updateOrder(@RequestBody Order order) throws Exception {
+    public ResponseEntity<Object> updateOrder(@RequestBody Order order) throws Exception {
         if(OrderRepository.updateOrder(order)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/getOrderAndOrderItem")
+    @GetMapping("/getOrderAndOrderItem")
     public ResponseEntity<Object> getOrderAndOrderItem() throws Exception {
         List<OrderAndOrderItem> orderAndOrderItemList = OrderRepository.getOrderAndOrderItem();
         if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);
         else return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/makeOrder")
+    public ResponseEntity<Object> makeOrder(@RequestBody OrderDetails orderDetails) throws Exception {
+        if(OrderDetailsRepositiry.createOrderDetails(orderDetails)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+    /*@GetMapping("/getOrderDetails")
+    public ResponseEntity<Object> getOrderDetails() throws Exception {
+        if(OrderDetailsRepositiry.getOrderDetails()) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }*/
 }

@@ -34,19 +34,19 @@ public class PaymentController {
     }
 
     @PostMapping("/createPayment")
-    public ResponseEntity<String> createPayment(@RequestBody Payment payment) throws Exception {
+    public ResponseEntity<Object> createPayment(@RequestBody Payment payment) throws Exception {
         if(PaymentRepository.createPayment(payment)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updatePayment")
-    public ResponseEntity<String> updatePayment(@RequestBody Payment payment) throws Exception {
+    public ResponseEntity<Object> updatePayment(@RequestBody Payment payment) throws Exception {
         if(PaymentRepository.updatePayment(payment)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deletePayment")
-    public ResponseEntity<String> deletePayment(@RequestParam int[] paymentId) throws Exception {
+    public ResponseEntity<Object> deletePayment(@RequestParam int[] paymentId) throws Exception {
         if(PaymentRepository.deletePayment(paymentId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

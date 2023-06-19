@@ -56,19 +56,19 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<String> createProduct(@RequestBody Product product) throws Exception {
+    public ResponseEntity<Object> createProduct(@RequestBody Product product) throws Exception {
         if(ProductRepository.createProduct(product)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteProduct")
-    public ResponseEntity<String>  deleteProduct(@RequestParam int[] productId) throws Exception {
+    public ResponseEntity<Object>  deleteProduct(@RequestParam int[] productId) throws Exception {
         if(ProductRepository.deleteProduct(productId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateProduct")
-    public ResponseEntity<String>  updateProduct(@RequestBody Product product) throws Exception {
+    public ResponseEntity<Object>  updateProduct(@RequestBody Product product) throws Exception {
         if(ProductRepository.updateProduct(product)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

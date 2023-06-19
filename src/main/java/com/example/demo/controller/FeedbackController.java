@@ -26,19 +26,19 @@ public class FeedbackController {
     }
 
     @PostMapping("/createFeedback")
-    public ResponseEntity<String> createFeedback(@RequestBody Feedback feedback) throws Exception {
+    public ResponseEntity<Object> createFeedback(@RequestBody Feedback feedback) throws Exception {
         if(FeedbackRepository.createFeedback(feedback)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deleteFeedback")
-    public ResponseEntity<String> deleteFeedback(@RequestParam int[] feedbackId) throws Exception {
+    public ResponseEntity<Object> deleteFeedback(@RequestParam int[] feedbackId) throws Exception {
         if(FeedbackRepository.deleteFeedback(feedbackId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateFeedback")
-    public ResponseEntity<String> updateFeedback(@RequestBody Feedback feedback) throws Exception {
+    public ResponseEntity<Object> updateFeedback(@RequestBody Feedback feedback) throws Exception {
         if(FeedbackRepository.updateFeedback(feedback)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

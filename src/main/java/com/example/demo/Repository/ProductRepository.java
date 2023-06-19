@@ -201,6 +201,9 @@ public class ProductRepository {
     public static boolean updateProduct(Product product) throws Exception {
         String dateUpdate = DBUtils.getCurrentDate();
         try {
+            String status = product.getStatus();
+            if(product.getQuantity() == 0) status = "hết hàng";
+            else if(status.equalsIgnoreCase("hết hàng")) status = "";
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
                 String sql = "Update dbo.Product set productName = ?, price = ?, quantity = ?, categoryId = ?, status = ?, description = ?, image = ?, dateUpdate = ? where productId = ?";
@@ -209,7 +212,7 @@ public class ProductRepository {
                 pst.setInt(2, product.getPrice());
                 pst.setInt(3, product.getQuantity());
                 pst.setInt(4, product.getCategoryId());
-                pst.setString(5, product.getStatus());
+                pst.setString(5, status);
                 pst.setString(6, product.getDescription());
                 pst.setString(7, product.getImage());
                 pst.setString(8, dateUpdate);

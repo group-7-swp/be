@@ -24,7 +24,7 @@ public class DeliveryRepository {
                     while (table.next()) {
                         Delivery delivery = new Delivery();
                         delivery.setDeliveryId(table.getInt("deliveryId"));
-                        delivery.setAddress(table.getString("address"));
+                        delivery.setAddressId(table.getInt("addressId"));
                         deliveryList.add(delivery);
                     }
                 }
@@ -47,7 +47,7 @@ public class DeliveryRepository {
                 if (table != null) {
                     while (table.next()) {
                         delivery.setDeliveryId(table.getInt("deliveryId"));
-                        delivery.setAddress(table.getString("address"));
+                        delivery.setAddressId(table.getInt("addressId"));
                     }
                 }
             }
@@ -61,9 +61,9 @@ public class DeliveryRepository {
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "INSERT INTO Delivery (address) VALUES (?)";
+                String sql = "INSERT INTO Delivery (addressId) VALUES (?)";
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, delivery.getAddress());
+                pst.setInt(1, delivery.getAddressId());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
             }
@@ -97,9 +97,9 @@ public class DeliveryRepository {
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "Update Delivery set address = ? where deliveryId = ?";
+                String sql = "Update Delivery set addressId = ? where deliveryId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, delivery.getAddress());
+                pst.setInt(1, delivery.getAddressId());
                 pst.setInt(2, delivery.getDeliveryId());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
@@ -109,4 +109,26 @@ public class DeliveryRepository {
         }
         return false;
     }
+
+    /*public static Delivery getDeliveryByAddressId(int addressId) throws Exception {
+        Delivery delivery = new Delivery();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "select * from dbo.Delivery where addressId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, addressId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        delivery.setDeliveryId(table.getInt("deliveryId"));
+                        delivery.setAddressId(table.getInt("addressId"));
+                    }
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return delivery;
+    }*/
 }

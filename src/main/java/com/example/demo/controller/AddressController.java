@@ -41,13 +41,13 @@ public class AddressController {
     }
 
     @DeleteMapping("/deleteAddress")
-    public ResponseEntity<String> deleteAddress(@RequestParam int[] addressId) throws Exception {
+    public ResponseEntity<Object> deleteAddress(@RequestParam int[] addressId) throws Exception {
         if (AddressRepository.deleteAddress(addressId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/updateAddress")
-    public ResponseEntity<String> updateAddress(@RequestBody Address adress) throws Exception {
+    public ResponseEntity<Object> updateAddress(@RequestBody Address adress) throws Exception {
         if (AddressRepository.updateAddress(adress)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

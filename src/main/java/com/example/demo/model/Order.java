@@ -21,4 +21,13 @@ public class Order {
     private String note;
     private int totalPayment;
     private Date paymentDate;
+
+    public Order(int userId, int paymentId, int deliveryId, String status, String note, int totalPayment){
+        this.userId = userId;
+        this.paymentId = paymentId;
+        this.deliveryId = deliveryId;
+        this.status = status;
+        this.note = note;
+        this.totalPayment = totalPayment;
+    }
 }

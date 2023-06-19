@@ -5,6 +5,7 @@ import com.example.demo.model.Order;
 import com.example.demo.model.OrderAndOrderItem;
 import org.springframework.http.ResponseEntity;
 
+import java.io.Console;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class OrderRepository {
                         order.setDeliveryId(table.getInt("deliveryId"));
                         order.setStatus(table.getString("status"));
                         order.setNote(table.getString("note"));
-                        order.setTotalPayment(table.getInt("totalPayment"));
+                        //order.setTotalPayment(table.getInt("totalPayment"));
                         order.setPaymentDate(table.getDate("paymentDate"));
                         orderList.add(order);
                     }
@@ -61,7 +62,7 @@ public class OrderRepository {
                         order.setDeliveryId(table.getInt("deliveryId"));
                         order.setStatus(table.getString("status"));
                         order.setNote(table.getString("note"));
-                        order.setTotalPayment(table.getInt("totalPayment"));
+                        //order.setTotalPayment(table.getInt("totalPayment"));
                         order.setPaymentDate(table.getDate("paymentDate"));
                     }
                 }
@@ -93,7 +94,7 @@ public class OrderRepository {
         return false;
     }
 
-    public static boolean createOrder(Order Order) throws Exception {
+    public static boolean createOrder(Order order) throws Exception {
         try{
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
@@ -101,13 +102,13 @@ public class OrderRepository {
                         "VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, Order.getUserId());
-                pst.setInt(2, Order.getPaymentId());
+                pst.setInt(1, order.getUserId());
+                pst.setInt(2, order.getPaymentId());
                 pst.setString(3, DBUtils.getCurrentDate());
-                pst.setInt(4, Order.getDeliveryId());
-                pst.setString(5, Order.getStatus());
-                pst.setString(6, Order.getNote());
-                pst.setInt(7, Order.getTotalPayment());
+                pst.setInt(4, order.getDeliveryId());
+                pst.setString(5, order.getStatus());
+                pst.setString(6, order.getNote());
+                pst.setInt(7, order.getTotalPayment());
                 //pst.setString(8, DBUtils.getCurrentDate());
 
                 int row = pst.executeUpdate();

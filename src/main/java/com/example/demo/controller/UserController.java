@@ -62,13 +62,13 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<String> deleteUser(@RequestParam int[] userId) throws Exception {
+    public ResponseEntity<Object> deleteUser(@RequestParam int[] userId) throws Exception {
         if(UserRepository.deleteUser(userId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/updateUser")
-    public ResponseEntity<String> updateUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<Object> updateUser(@RequestBody User user) throws Exception {
         if(UserRepository.updateUser(user)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

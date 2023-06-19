@@ -37,17 +37,17 @@ public class CategoryController {
     }
 
     @PostMapping("/createCategory")
-    public ResponseEntity<String> createCategory(@RequestBody Category category) throws Exception {
+    public ResponseEntity<Object> createCategory(@RequestBody Category category) throws Exception {
         if (CategoryRepository.createCategory(category)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
     @PatchMapping("/updateCategory")
-    public ResponseEntity<String> updateCategory(@RequestBody Category category) throws Exception {
+    public ResponseEntity<Object> updateCategory(@RequestBody Category category) throws Exception {
         if (CategoryRepository.updateCategory(category)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
     @DeleteMapping("/deleteCategory")
-    public ResponseEntity<String> deleteCategory(@RequestParam int[] categoryId) throws Exception {
+    public ResponseEntity<Object> deleteCategory(@RequestParam int[] categoryId) throws Exception {
         if (CategoryRepository.deleteCategory(categoryId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
