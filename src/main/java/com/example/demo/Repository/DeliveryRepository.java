@@ -24,7 +24,7 @@ public class DeliveryRepository {
                     while (table.next()) {
                         Delivery delivery = new Delivery();
                         delivery.setDeliveryId(table.getInt("deliveryId"));
-                        delivery.setAddressId(table.getInt("addressId"));
+                        delivery.setAddress(table.getString("address"));
                         deliveryList.add(delivery);
                     }
                 }
@@ -47,7 +47,7 @@ public class DeliveryRepository {
                 if (table != null) {
                     while (table.next()) {
                         delivery.setDeliveryId(table.getInt("deliveryId"));
-                        delivery.setAddressId(table.getInt("addressId"));
+                        delivery.setAddress(table.getString("address"));
                     }
                 }
             }
@@ -61,9 +61,9 @@ public class DeliveryRepository {
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "INSERT INTO Delivery (addressId) VALUES (?)";
+                String sql = "INSERT INTO Delivery (address) VALUES (?)";
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, delivery.getAddressId());
+                pst.setString(1, delivery.getAddress());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
             }
@@ -97,9 +97,9 @@ public class DeliveryRepository {
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "Update Delivery set addressId = ? where deliveryId = ?";
+                String sql = "Update Delivery set address = ? where deliveryId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, delivery.getAddressId());
+                pst.setString(1, delivery.getAddress());
                 pst.setInt(2, delivery.getDeliveryId());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;

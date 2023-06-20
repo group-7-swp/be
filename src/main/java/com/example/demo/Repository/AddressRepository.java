@@ -182,4 +182,29 @@ public class AddressRepository {
         }
         return addressList;
     }
+
+    public static  Address getAddressByUserIdAndAddress(String userId, String txrAddress) throws Exception {
+        Address address = new Address();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * From Address Where userUid = ? and address = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, userId);
+                pst.setString(2, txrAddress);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        address.setAddressId(table.getInt("addressId"));
+                        address.setAddress(table.getString("address"));
+                        address.setDateCreate(table.getDate("dateCreate"));
+                        address.setDateUpdate(table.getDate("dateUpdate"));
+                    }
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return address;
+    }
 }

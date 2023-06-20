@@ -2,7 +2,6 @@ package com.example.demo.Repository;
 
 import com.example.demo.model.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailsRepositiry {
@@ -21,7 +20,8 @@ public class OrderDetailsRepositiry {
             }
 
             //create new delivery
-            Delivery delivery = new Delivery(0, orderDetails.getDeliveryAddressId());
+            String address = AddressRepository.getAddressById(orderDetails.getDeliveryAddressId()).getAddress();
+            Delivery delivery = new Delivery(0, address);
             DeliveryRepository.createDelivery(delivery);
             List<Delivery> deliveryList = DeliveryRepository.getAllDelivery();
             delivery = deliveryList.get(deliveryList.size() - 1);

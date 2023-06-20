@@ -12,5 +12,5 @@ import lombok.Setter;
 
 public class Delivery {
     private int deliveryId;
-    private int addressId;
+    private String address;
 }
