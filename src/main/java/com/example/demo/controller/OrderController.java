@@ -52,13 +52,7 @@ public class OrderController {
 
     @PostMapping("/makeOrder")
     public ResponseEntity<Object> makeOrder(@RequestBody OrderDetails orderDetails) throws Exception {
-        if(OrderDetailsRepositiry.createOrderDetails(orderDetails)) return ResponseEntity.ok().build();
+        if(OrderDetailsRepository.createOrderDetails(orderDetails)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
-
-    /*@GetMapping("/getOrderDetails")
-    public ResponseEntity<Object> getOrderDetails() throws Exception {
-        if(OrderDetailsRepositiry.getOrderDetails()) return ResponseEntity.ok().build();
-        else return ResponseEntity.badRequest().build();
-    }*/
 }

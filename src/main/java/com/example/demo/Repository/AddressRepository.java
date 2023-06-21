@@ -183,14 +183,14 @@ public class AddressRepository {
         return addressList;
     }
 
-    public static  Address getAddressByUserIdAndAddress(String userId, String txrAddress) throws Exception {
+    public static  Address getAddressByUserIdAndAddress(int userId, String txrAddress) throws Exception {
         Address address = new Address();
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "Select * From Address Where userUid = ? and address = ?";
+                String sql = "Select * From Address Where userId = ? and address = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, userId);
+                pst.setInt(1, userId);
                 pst.setString(2, txrAddress);
                 ResultSet table = pst.executeQuery();
                 if (table != null) {

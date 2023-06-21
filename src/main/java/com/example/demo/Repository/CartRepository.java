@@ -60,8 +60,8 @@ public class CartRepository {
         return cartList;
     }
 
-    public static List<Cart> getCartByUserId(int userId) throws Exception {
-        List<Cart> cartList = new ArrayList<>();
+    public static Cart getCartByUserId(int userId) throws Exception {
+        Cart cart = new Cart();
         try{
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
@@ -71,17 +71,16 @@ public class CartRepository {
                 ResultSet table = pst.executeQuery();
                 if (table != null) {
                     while (table.next()) {
-                        Cart cart = new Cart();
                         cart.setCartId(table.getInt("cartId"));
                         cart.setUserId(table.getInt("userId"));
-                        cartList.add(cart);
                     }
+                    return cart;
                 }
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return cartList;
+        return null;
     }
 
     public static Cart getCartByUserUid(String userUid) throws Exception {

@@ -3,9 +3,6 @@ package com.example.demo.Repository;
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Order;
 import com.example.demo.model.OrderAndOrderItem;
-import org.springframework.http.ResponseEntity;
-
-import java.io.Console;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +26,9 @@ public class OrderRepository {
                         order.setPaymentId(table.getInt("paymentId"));
                         order.setOrderDate(table.getDate("orderDate"));
                         order.setDeliveryId(table.getInt("deliveryId"));
-                        order.setStatus(table.getString("status"));
+                        order.setStatusId(table.getInt("statusId"));
                         order.setNote(table.getString("note"));
-                        //order.setTotalPayment(table.getInt("totalPayment"));
+                        order.setTotalPayment(table.getInt("totalPayment"));
                         order.setPaymentDate(table.getDate("paymentDate"));
                         orderList.add(order);
                     }
@@ -60,9 +57,9 @@ public class OrderRepository {
                         order.setPaymentId(table.getInt("paymentId"));
                         order.setOrderDate(table.getDate("orderDate"));
                         order.setDeliveryId(table.getInt("deliveryId"));
-                        order.setStatus(table.getString("status"));
+                        order.setStatusId(table.getInt("statusId"));
                         order.setNote(table.getString("note"));
-                        //order.setTotalPayment(table.getInt("totalPayment"));
+                        order.setTotalPayment(table.getInt("totalPayment"));
                         order.setPaymentDate(table.getDate("paymentDate"));
                     }
                 }
@@ -98,7 +95,7 @@ public class OrderRepository {
         try{
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql ="INSERT INTO Orders(userId, paymentId, orderDate, deliveryId, status, note, totalPayment)" +
+                String sql ="INSERT INTO Orders(userId, paymentId, orderDate, deliveryId, statusId, note, totalPayment)" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -106,7 +103,7 @@ public class OrderRepository {
                 pst.setInt(2, order.getPaymentId());
                 pst.setString(3, DBUtils.getCurrentDate());
                 pst.setInt(4, order.getDeliveryId());
-                pst.setString(5, order.getStatus());
+                pst.setInt(5, order.getStatusId());
                 pst.setString(6, order.getNote());
                 pst.setInt(7, order.getTotalPayment());
                 //pst.setString(8, DBUtils.getCurrentDate());
@@ -131,7 +128,7 @@ public class OrderRepository {
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, Order.getPaymentId());
                 pst.setInt(2, Order.getDeliveryId());
-                pst.setString(3, Order.getStatus());
+                pst.setInt(3, Order.getStatusId());
                 pst.setString(4, Order.getNote());
                 pst.setInt(5, Order.getTotalPayment());
                 pst.setString(6, Order.getPaymentDate().toString());

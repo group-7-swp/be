@@ -2,17 +2,19 @@ package com.example.demo.Repository;
 
 import com.example.demo.model.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailsRepositiry {
+public class OrderDetailsRepository {
     public static boolean createOrderDetails(OrderDetails orderDetails) throws Exception {
         try{
             List<CartItems> cartItemsList = orderDetails.getCartItemsList();
 
             //check product quantity
             for(int i = 0; i < cartItemsList.size(); i++) {
-                CartItems cartItems = cartItemsList.get(i);
+                CartItems cartItems = CartItemsRepository.getCartItemsById(cartItemsList.get(i).getCartItemId());
                 int productId = cartItems.getProductId();
+                System.out.println("*********"+ productId +"*********");
                 int quantity = cartItems.getQuantity();
                 Product product = ProductRepository.getProductById(productId);
                 int newQuantity = product.getQuantity() - quantity;
@@ -30,10 +32,10 @@ public class OrderDetailsRepositiry {
             int userId = orderDetails.getUserId();
             int paymentId = orderDetails.getPaymentId();
             int deliveryId = delivery.getDeliveryId();
-            String status ="Processing";
+            int statusId = 1;
             String note = orderDetails.getNote();
             int totalPayment = orderDetails.getTotalPayment();
-            Order order = new Order(userId, paymentId, deliveryId, status, note, totalPayment);
+            Order order = new Order(userId, paymentId, deliveryId, statusId, note, totalPayment);
             OrderRepository.createOrder(order);
             List<Order> orderList = OrderRepository.getAllOrder();
             order = orderList.get(orderList.size() - 1);
@@ -42,7 +44,7 @@ public class OrderDetailsRepositiry {
             int orderId = order.getOrderId();
             int cartItemId[] = new int[cartItemsList.size()]; //create int cartItemId to delete cartItems
             for(int i = 0; i < cartItemsList.size(); i++){
-                CartItems cartItems = cartItemsList.get(i);
+                CartItems cartItems = CartItemsRepository.getCartItemsById(cartItemsList.get(i).getCartItemId());
                 cartItemId[i] = cartItems.getCartItemId(); //get cartItemId to delete cartItems
                 int productId = cartItems.getProductId();
                 int quantity = cartItems.getQuantity();
@@ -63,4 +65,6 @@ public class OrderDetailsRepositiry {
             return false;
         }
     }
+
+
 }

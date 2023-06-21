@@ -32,8 +32,8 @@ public class CartController {
 
     @GetMapping("/getCartByUserId")
     public ResponseEntity<Object> getCartByUserId(@RequestParam int userId) throws Exception {
-        List<Cart> cartList = CartRepository.getCartByUserId(userId);
-        if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
+        Cart cart = CartRepository.getCartByUserId(userId);
+        if(cart!=null) return ResponseEntity.ok().body(cart);
         else return ResponseEntity.badRequest().build();
     }
     @GetMapping("/getCartByUserUid")
