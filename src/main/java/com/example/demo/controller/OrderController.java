@@ -48,10 +48,16 @@ public class OrderController {
         if(OrderDetailsRepository.createOrderDetails(orderDetails)) return ResponseEntity.ok().body("Thành công");
         else return ResponseEntity.badRequest().body("Đã xa ra lỗi! Vui lòng kiểm tra lại giỏ hàng hoặc thông tin giao hàng.");
     }
-
-    @GetMapping("/getOrderAndOrderItem")
+    @GetMapping("/getAllOrderAndOrderItem")
     public ResponseEntity<Object> getOrderAndOrderItem() throws Exception {
         List<OrderAndOrderItem> orderAndOrderItemList = OrderDetailsRepository.getAllOrderDetails();
+        if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/getOrderAndOrderItemByUserId")
+    public ResponseEntity<Object> getOrderDetailsByUserId(@RequestParam int userId) throws Exception {
+        List<OrderAndOrderItem> orderAndOrderItemList = OrderDetailsRepository.getOrderDetailsByUserId(userId);
         if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);
         else return ResponseEntity.badRequest().build();
     }

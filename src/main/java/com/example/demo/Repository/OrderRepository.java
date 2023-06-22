@@ -197,4 +197,35 @@ public class OrderRepository {
         }
         return productAndOrderItemList;
     }
+
+    public static List<Order> getOrderByUserId(int userId) throws Exception {
+        List<Order> orderList = new ArrayList<>();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Select * from dbo.Orders where userId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, userId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Order order = new Order();
+                        order.setOrderId(table.getInt("orderId"));
+                        order.setUserId(table.getInt("userId"));
+                        order.setPaymentId(table.getInt("paymentId"));
+                        order.setOrderDate(table.getDate("orderDate"));
+                        order.setDeliveryId(table.getInt("deliveryId"));
+                        order.setStatusId(table.getInt("statusId"));
+                        order.setNote(table.getString("note"));
+                        order.setTotalPayment(table.getInt("totalPayment"));
+                        order.setPaymentDate(table.getDate("paymentDate"));
+                        orderList.add(order);
+                    }
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return orderList;
+    }
 }
