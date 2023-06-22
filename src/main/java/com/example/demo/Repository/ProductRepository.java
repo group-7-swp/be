@@ -54,8 +54,16 @@ public class ProductRepository {
 
     //Search product by it's name
     public static List<Product> searchByName(String searchValue) throws Exception {
-        String sql = "select * from dbo.Product where productName like '%" + searchValue + "%'";
-        List<Product> productList = getProduct(sql);
+        /*Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+        Matcher hasSpecial = special.matcher(searchValue);
+        List<Product> productList = new ArrayList<>();
+        if(!hasSpecial.find()) {
+            String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
+            productList = getProduct(sql);
+        }
+        return productList;*/
+        String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
+        List<Product> productList  = getProduct(sql);
         return productList;
     }
 

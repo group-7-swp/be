@@ -12,6 +12,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderAndOrderItem {
-    private Order order;
-    private List<OrderItem> OrderItem;
+    private int orderId;
+    private int userId;
+    private Payment payment;
+    private Date orderDate;
+    private Delivery delivery;
+    private OrderStatus orderStatus;
+    private String note;
+    private int totalPayment;
+    private Date paymentDate;
+    private List<ProductAndOrderItem> productAndOrderItemList;
 }

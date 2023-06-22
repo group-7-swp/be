@@ -1,11 +1,17 @@
 package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
-import com.example.demo.model.Order;
-import com.example.demo.model.OrderAndOrderItem;
+import com.example.demo.model.*;
+
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
 
 import static com.example.demo.Repository.OrderItemRepository.*;
 
@@ -94,10 +100,16 @@ public class OrderRepository {
     public static boolean createOrder(Order order) throws Exception {
         try{
             Connection cn = DBUtils.makeConnection();
+            String sql;
             if (cn != null) {
-                String sql ="INSERT INTO Orders(userId, paymentId, orderDate, deliveryId, statusId, note, totalPayment)" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?) ";
-
+                if(order.getPaymentId() == 1) {
+                    sql = "INSERT INTO Orders(userId, paymentId, orderDate, deliveryId, statusId, note, totalPayment, paymentDate)" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
+                }
+                else{
+                    sql ="INSERT INTO Orders(userId, paymentId, orderDate, deliveryId, statusId, note, totalPayment)" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?) ";
+                }
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, order.getUserId());
                 pst.setInt(2, order.getPaymentId());
@@ -106,8 +118,8 @@ public class OrderRepository {
                 pst.setInt(5, order.getStatusId());
                 pst.setString(6, order.getNote());
                 pst.setInt(7, order.getTotalPayment());
-                //pst.setString(8, DBUtils.getCurrentDate());
 
+                if(order.getPaymentId() == 1) pst.setString(8, DBUtils.getCurrentDate());
                 int row = pst.executeUpdate();
                 if (row > 0) {
                     return true;
@@ -124,14 +136,17 @@ public class OrderRepository {
         try{
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "Update dbo.Orders set paymentId = ?, deliveryId = ?, status = ?, note = ?, totalPayment = ?, paymentDate = ? where OrderId = ?";
+                String sql = "Update dbo.Orders set paymentId = ?, deliveryId = ?, statusId = ?, note = ?, totalPayment = ?, paymentDate = ? where OrderId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, Order.getPaymentId());
                 pst.setInt(2, Order.getDeliveryId());
                 pst.setInt(3, Order.getStatusId());
                 pst.setString(4, Order.getNote());
                 pst.setInt(5, Order.getTotalPayment());
-                pst.setString(6, Order.getPaymentDate().toString());
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String strDate = dateFormat.format(Order.getPaymentDate());
+                pst.setString(6, strDate);
                 pst.setInt(7, Order.getOrderId());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
@@ -142,16 +157,44 @@ public class OrderRepository {
         return false;
     }
 
-    public static List<OrderAndOrderItem> getOrderAndOrderItem() throws Exception {
-        List<Order> orderList = getAllOrder();
-        List<OrderAndOrderItem> orderAndOrderItemList = new ArrayList<>();
-        for (int i = 0; i < orderList.size(); i++) {
-            OrderAndOrderItem orderAndOrderItem = new OrderAndOrderItem();
-            Order order = orderList.get(i);
-            orderAndOrderItem.setOrder(order);
-            orderAndOrderItem.setOrderItem(getOrderItemByOrderId(order.getOrderId()));
-            orderAndOrderItemList.add(orderAndOrderItem);
+    public static List<ProductAndOrderItem> getProductAndOrderItem(int orderId) throws Exception {
+        List<ProductAndOrderItem> productAndOrderItemList = new ArrayList<>();
+        try {
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "select o.orderItemsId, o.quantity, o.productId, p.productName, p.price, p.quantity as productQuantity, p.categoryId, p.description, p.status, p.image, p.dateCreate, p.dateUpdate " +
+                        "from OrderItems o " +
+                        "left join Product p on p.productId = o.productId " +
+                        "where o.orderId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, orderId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        ProductAndOrderItem productAndOrderItem = new ProductAndOrderItem();
+                        productAndOrderItem.setOrderItemId(table.getInt("orderItemsId"));
+                        productAndOrderItem.setQuantity(table.getInt("quantity"));
+
+                        Product product = new Product();
+                        product.setProductId(table.getInt("productId"));
+                        product.setProductName(table.getString("productName"));
+                        product.setPrice(table.getInt("price"));
+                        product.setQuantity(table.getInt("productQuantity"));
+                        product.setCategoryId(table.getInt("categoryId"));
+                        product.setStatus(table.getString("status"));
+                        product.setDescription(table.getString("description"));
+                        product.setImage(table.getString("image"));
+                        product.setDateCreate(table.getDate("dateCreate"));
+                        product.setDateUpdate(table.getDate("dateUpdate"));
+
+                        productAndOrderItem.setProduct(product);
+                        productAndOrderItemList.add(productAndOrderItem);
+                    }
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return orderAndOrderItemList;
+        return productAndOrderItemList;
     }
 }

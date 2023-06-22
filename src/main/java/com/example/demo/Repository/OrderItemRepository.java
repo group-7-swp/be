@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.model.CartItems;
 import com.example.demo.model.OrderItem;
 import org.springframework.http.ResponseEntity;
 
