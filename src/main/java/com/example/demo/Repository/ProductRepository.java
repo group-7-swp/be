@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,19 +53,30 @@ public class ProductRepository {
         return productList;
     }
 
+    //Chuyển tiếng Việt ko dấu
+    /*public static String unAccent(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
+    }*/
+
     //Search product by it's name
     public static List<Product> searchByName(String searchValue) throws Exception {
-        /*Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-        Matcher hasSpecial = special.matcher(searchValue);
-        List<Product> productList = new ArrayList<>();
-        if(!hasSpecial.find()) {
-            String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
-            productList = getProduct(sql);
-        }
-        return productList;*/
         String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
         List<Product> productList  = getProduct(sql);
         return productList;
+
+        //Search chữ ko dấu
+        /*List<Product> productList = getProduct("select * from dbo.Product");
+        Product product = new Product();
+        List<Product> result = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++){
+            product = productList.get(i);
+            if(unAccent(product.getProductName()).toLowerCase().contains(unAccent(searchValue).toLowerCase())){
+                result.add(product);
+            }
+        }
+        return result;*/
     }
 
     //Filter product by id
@@ -234,5 +246,19 @@ public class ProductRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String[] getProductName() throws Exception {
+        String[] productName = null;
+        try {
+            List<Product> productList = getProduct("select * from dbo.Product");
+            productName = new String[productList.size()];
+            for (int i = 0; i < productList.size(); i++){
+                productName[i] = productList.get(i).getProductName();
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return productName;
     }
 }

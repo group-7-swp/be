@@ -74,9 +74,16 @@ public class ProductController {
     }
 
     @GetMapping("/filterByCategory")
-    public ResponseEntity<Object> getProductByCategoryId(@RequestParam int categoryId) throws Exception {
+    public ResponseEntity<Object> filterByCategory(@RequestParam int categoryId) throws Exception {
         List<Product> productList = ProductRepository.filterByCategoryId(categoryId);
         if(productList.size()>0) return ResponseEntity.ok().body(productList);
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/getProductName")
+    public ResponseEntity<Object> getProductName() throws Exception {
+        String[] productName = ProductRepository.getProductName();
+        if(productName != null) return ResponseEntity.ok().body(productName);
         else return ResponseEntity.badRequest().build();
     }
 }

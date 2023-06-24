@@ -118,6 +118,7 @@ public class AddressRepository {
                 if (table != null) {
                     while (table.next()) {
                         Address address = new Address();
+                        address.setUserId(table.getInt("userId"));
                         address.setAddressId(table.getInt("addressId"));
                         address.setAddress(table.getString("address"));
                         address.setDateCreate(table.getDate("dateCreate"));
@@ -169,6 +170,7 @@ public class AddressRepository {
                 if (table != null) {
                     while (table.next()) {
                         Address address = new Address();
+                        address.setUserId(table.getInt("userId"));
                         address.setAddressId(table.getInt("addressId"));
                         address.setAddress(table.getString("address"));
                         address.setDateCreate(table.getDate("dateCreate"));
@@ -195,6 +197,7 @@ public class AddressRepository {
                 ResultSet table = pst.executeQuery();
                 if (table != null) {
                     while (table.next()) {
+                        address.setUserId(table.getInt("userId"));
                         address.setAddressId(table.getInt("addressId"));
                         address.setAddress(table.getString("address"));
                         address.setDateCreate(table.getDate("dateCreate"));
