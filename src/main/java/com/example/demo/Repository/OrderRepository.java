@@ -144,9 +144,12 @@ public class OrderRepository {
                 pst.setString(4, Order.getNote());
                 pst.setInt(5, Order.getTotalPayment());
 
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                String strDate = dateFormat.format(Order.getPaymentDate());
-                pst.setString(6, strDate);
+                if(Order.getPaymentDate() != null) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    String strDate = dateFormat.format(Order.getPaymentDate());
+                    pst.setString(6, strDate);
+                }else pst.setString(6, "");
+
                 pst.setInt(7, Order.getOrderId());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
@@ -227,5 +230,28 @@ public class OrderRepository {
             e.printStackTrace();
         }
         return orderList;
+    }
+
+    public static boolean cancelOrder(int orderId){
+        try {
+            Order order = getOrderById(orderId);
+            if (order.getStatusId() == 1){
+                order.setStatusId(5);
+                if(updateOrder(order)) {
+                    List<OrderItem> orderItemList = OrderItemRepository.getOrderItemByOrderId(orderId);
+                    for (int i = 0; i < orderItemList.size(); i++) {
+                        int productId = orderItemList.get(i).getProductId();
+                        Product product = ProductRepository.getProductById(productId);
+                        int newQuantity = orderItemList.get(i).getQuantity() + product.getQuantity();
+                        product.setQuantity(newQuantity);
+                        ProductRepository.updateProduct(product);
+                    }
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
