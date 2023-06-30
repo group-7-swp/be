@@ -29,7 +29,8 @@ public class OrderDetailsRepository {
             delivery = deliveryList.get(deliveryList.size() - 1);
 
             //create new order
-            int userId = orderDetails.getUserId();
+            String userUid = orderDetails.getUserUid();
+            int userId = UserRepository.getUserByUserUid(userUid).getUserId();
             int paymentId = orderDetails.getPaymentId();
             int deliveryId = delivery.getDeliveryId();
             int statusId = 1;

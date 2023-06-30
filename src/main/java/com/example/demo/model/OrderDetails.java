@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class OrderDetails {
-    private int userId;
+    private String userUid;
     private int paymentId;
     private int deliveryAddressId;
     private String note;
