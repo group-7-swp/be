@@ -254,4 +254,19 @@ public class OrderRepository {
         }
         return false;
     }
+
+    public static boolean updateOrderX(Order Order) throws Exception {
+        try{
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                String sql = "Update dbo.Orders set statusId = ? where OrderId = ?";
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, Order.getStatusId());
+                pst.setInt(2,Order.getOrderId());
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

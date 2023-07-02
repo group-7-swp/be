@@ -43,6 +43,12 @@ public class OrderController {
         else return ResponseEntity.badRequest().build();
     }
 
+    @PostMapping("/updateOrderX")
+    public ResponseEntity<Object> updateOrderX(@RequestBody Order order) throws Exception {
+        if(OrderRepository.updateOrder(order)) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
     @PostMapping("/makeOrder")
     public ResponseEntity<Object> makeOrder(@RequestBody OrderDetails orderDetails) throws Exception {
         if(OrderDetailsRepository.createOrderDetails(orderDetails)) return ResponseEntity.ok().body("Thành công");
