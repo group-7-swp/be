@@ -19,15 +19,23 @@ public class OrderController {
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/getOrderById")
-    public ResponseEntity<Object> getOrderById(int orderItemId) throws Exception {
-        Order order = OrderRepository.getOrderById(orderItemId);
+    /*@GetMapping("/getOrderById")
+    public ResponseEntity<Object> getOrderById(int orderId) throws Exception {
+        Order order = OrderRepository.getOrderById(orderId);
         if(order != null) return ResponseEntity.ok().body(order);
         else return ResponseEntity.badRequest().build();
+    }*/
+
+    @GetMapping("/getOrderById")
+    public ResponseEntity<Object> getOrderById(int orderId) throws Exception {
+        OrderAndOrderItem orderAndOrderItem = OrderDetailsRepository.getOrderDetailsByOrderId(orderId);
+        if(orderAndOrderItem.getOrderId() != 0) return ResponseEntity.ok().body(orderAndOrderItem);
+        else return ResponseEntity.badRequest().build();
     }
+
     @DeleteMapping("/deleteOrder")
-    public ResponseEntity<Object> deleteOrder(@RequestParam int[] orderItemId) throws Exception {
-        if(OrderRepository.deleteOrder(orderItemId)) return ResponseEntity.ok().build();
+    public ResponseEntity<Object> deleteOrder(@RequestParam int[] orderId) throws Exception {
+        if(OrderRepository.deleteOrder(orderId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
@@ -61,7 +69,7 @@ public class OrderController {
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/getOrderAndOrderItemByUserId")
+    @GetMapping("/getOrderAndOrderItemByUserid")
     public ResponseEntity<Object> getOrderDetailsByUserId(@RequestParam int userId) throws Exception {
         List<OrderAndOrderItem> orderAndOrderItemList = OrderDetailsRepository.getOrderDetailsByUserId(userId);
         if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);

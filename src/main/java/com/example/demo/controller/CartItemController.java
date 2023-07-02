@@ -21,7 +21,7 @@ public class CartItemController {
     @GetMapping("/getCartItemsById")
     public ResponseEntity<Object> getCartItemsById(@RequestParam int cartItemId) throws Exception {
         CartItems cartItems = CartItemsRepository.getCartItemsById(cartItemId);
-        if(cartItems != null) return ResponseEntity.ok().body(cartItems);
+        if(cartItems.getCartItemId() != 0) return ResponseEntity.ok().body(cartItems);
         else return ResponseEntity.badRequest().build();
     }
 
