@@ -98,7 +98,7 @@ public class OrderDetailsRepository {
 
                         //set payment
                         Payment payment = new Payment(table.getInt("paymentId"),
-                                table.getString("paymentType"));
+                                table.getString("paymentType"), table.getInt("paymentCost"));
                         orderAndOrderItem.setPayment(payment);
 
                         //set order date
@@ -129,8 +129,6 @@ public class OrderDetailsRepository {
         }
         return orderAndOrderItemList;
     }
-
-    //******************THE METHOD IN COMMENTS IS THE ALTERNATIVE SOLUTIONS*******************
 
     /*public static List<OrderAndOrderItem> getAllOrderDetails() {
         List<OrderAndOrderItem> orderAndOrderItemList = new ArrayList<>();
@@ -164,7 +162,7 @@ public class OrderDetailsRepository {
     public static List<OrderAndOrderItem> getAllOrderDetails() throws Exception {
         String sql = "Select o.orderId, o.userId, o.paymentId, o.orderDate, o.deliveryId, o.statusId, o.note, o.totalPayment,o.paymentDate, " +
                 "u.userRole, u.userName, u.userUid, u.email, u.phoneNumber, u.note, " +
-                "p.paymentType, d.address, os.status " +
+                "p.paymentType, p.paymentCost, d.address, os.status " +
                 "from Orders o " +
                 "left join Users u on u.userId = o.userId " +
                 "left join Payment p on p.paymentId = o.paymentId " +
@@ -206,7 +204,7 @@ public class OrderDetailsRepository {
     public static List<OrderAndOrderItem> getOrderDetailsByUserId(int userId) throws Exception {
         String sql = "Select o.orderId, o.userId, o.paymentId, o.orderDate, o.deliveryId, o.statusId, o.note, o.totalPayment,o.paymentDate, " +
                 "u.userRole, u.userName, u.userUid, u.email, u.phoneNumber, u.note, " +
-                "p.paymentType, d.address, os.status " +
+                "p.paymentType, p.paymentCost, d.address, os.status " +
                 "from Orders o " +
                 "left join Users u on u.userId = o.userId " +
                 "left join Payment p on p.paymentId = o.paymentId " +
@@ -247,7 +245,7 @@ public class OrderDetailsRepository {
     public static OrderAndOrderItem getOrderDetailsByOrderId(int orderId) throws Exception {
         String sql = "Select o.orderId, o.userId, o.paymentId, o.orderDate, o.deliveryId, o.statusId, o.note, o.totalPayment,o.paymentDate, " +
                 "u.userRole, u.userName, u.userUid, u.email, u.phoneNumber, u.note, " +
-                "p.paymentType, d.address, os.status " +
+                "p.paymentType, p.paymentCost, d.address, os.status " +
                 "from Orders o " +
                 "left join Users u on u.userId = o.userId " +
                 "left join Payment p on p.paymentId = o.paymentId " +
