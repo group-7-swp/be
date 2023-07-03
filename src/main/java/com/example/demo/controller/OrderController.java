@@ -70,7 +70,7 @@ public class OrderController {
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/getOrderAndOrderItemByUserid")
+    @GetMapping("/getOrderAndOrderItemByUserId")
     public ResponseEntity<Object> getOrderDetailsByUserId(@RequestParam int userId) throws Exception {
         List<OrderAndOrderItem> orderAndOrderItemList = OrderDetailsRepository.getOrderDetailsByUserId(userId);
         if(orderAndOrderItemList.size()>0) return ResponseEntity.ok().body(orderAndOrderItemList);
