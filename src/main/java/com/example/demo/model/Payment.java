@@ -12,4 +12,5 @@ import lombok.Setter;
 public class Payment {
     private int paymentId;
     private String paymentType;
+    private int paymentCost;
 }

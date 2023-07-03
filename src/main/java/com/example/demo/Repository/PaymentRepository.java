@@ -25,6 +25,7 @@ public class PaymentRepository {
                         Payment payment = new Payment();
                         payment.setPaymentId(table.getInt("paymentId"));
                         payment.setPaymentType(table.getString("paymentType"));
+                        payment.setPaymentCost(table.getInt("paymentCost"));
                         paymentList.add(payment);
                     }
                 }
@@ -48,6 +49,7 @@ public class PaymentRepository {
                     while (table.next()) {
                         payment.setPaymentId(table.getInt("paymentId"));
                         payment.setPaymentType(table.getString("paymentType"));
+                        payment.setPaymentCost(table.getInt("paymentCost"));
                     }
                 }
             }
@@ -64,6 +66,7 @@ public class PaymentRepository {
                 String sql = "INSERT INTO Payment(paymentType) Values (?)";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, payment.getPaymentType());
+                pst.setInt(2, payment.getPaymentCost());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
             }
@@ -97,10 +100,11 @@ public class PaymentRepository {
         try {
             Connection cn = DBUtils.makeConnection();
             if (cn != null) {
-                String sql = "UPDATE Payment SET paymentType = ? WHERE paymentId = ?";
+                String sql = "UPDATE Payment SET paymentType = ? paymentCost = ? WHERE paymentId = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, payment.getPaymentType());
                 pst.setInt(2, payment.getPaymentId());
+                pst.setInt(3, payment.getPaymentCost());
                 int row = pst.executeUpdate();
                 if (row > 0) return true;
             }
