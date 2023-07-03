@@ -16,7 +16,7 @@ public class OrderStatusController {
     @GetMapping("/allOrderStatus")
     public ResponseEntity<Object> getAllOrderStatus() throws Exception {
         List<OrderStatus> orderStatusList = OrderStatusRepository.getAllOrderStatus();
-        if (orderStatusList.size() != 0) {
+        if (orderStatusList.size() > 0) {
             return ResponseEntity.ok().body(orderStatusList);
         } else {
             return ResponseEntity.badRequest().build();
@@ -24,8 +24,8 @@ public class OrderStatusController {
     }
     @GetMapping("/getOrderStatusById")
     public ResponseEntity<Object> getPaymentById(@RequestParam int statusId) throws Exception {
-        List<OrderStatus> orderStatusList = OrderStatusRepository.getAllOrderStatus();
-        if (orderStatusList.size() != 0) return ResponseEntity.ok().body(orderStatusList.get(0));
+        OrderStatus orderStatus = OrderStatusRepository.getOrderStatusById(statusId);
+        if (orderStatus.getStatusId() != 0) return ResponseEntity.ok().body(orderStatus);
         else return ResponseEntity.badRequest().build();
     }
 

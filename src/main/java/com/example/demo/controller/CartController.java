@@ -25,15 +25,15 @@ public class CartController {
 
     @GetMapping("/getCartById")
     public ResponseEntity<Object> getCartByCartId(@RequestParam int cartId) throws Exception {
-        List<Cart> cartList = CartRepository.getCartByCartId(cartId);
-        if(cartList.size()>0) return ResponseEntity.ok().body(cartList.get(0));
+        Cart cart = CartRepository.getCartByCartId(cartId);
+        if(cart.getCartId() != 0) return ResponseEntity.ok().body(cart);
         else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/getCartByUserId")
     public ResponseEntity<Object> getCartByUserId(@RequestParam int userId) throws Exception {
         Cart cart = CartRepository.getCartByUserId(userId);
-        if(cart!=null) return ResponseEntity.ok().body(cart);
+        if(cart.getCartId() != 0) return ResponseEntity.ok().body(cart);
         else return ResponseEntity.badRequest().build();
     }
     @GetMapping("/getCartByUserUid")

@@ -31,7 +31,7 @@ public class AddressController {
     @GetMapping("/getAddressById")
     public ResponseEntity<Object> getAddressById(@RequestParam int addressId) throws Exception {
         Address address = AddressRepository.getAddressById(addressId);
-        if(address != null) return ResponseEntity.ok().body(address);
+        if(address.getAddressId() != 0) return ResponseEntity.ok().body(address);
         else return ResponseEntity.badRequest().build();
     }
 

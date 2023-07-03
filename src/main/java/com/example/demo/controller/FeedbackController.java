@@ -21,7 +21,7 @@ public class FeedbackController {
     @GetMapping("/getFeedbackById")
     public ResponseEntity<Object> getFeedbackById(@RequestParam int feedbackId) throws Exception {
         Feedback feedback = FeedbackRepository.getFeedbackById(feedbackId);
-        if(feedback!=null) return ResponseEntity.ok().body(feedback);
+        if(feedback.getFeedbackId() != 0) return ResponseEntity.ok().body(feedback);
         else return ResponseEntity.badRequest().build();
     }
 

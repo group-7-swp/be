@@ -20,14 +20,14 @@ public class OrderItemController {
 
     @GetMapping("/getOrderItemById")
     public ResponseEntity<Object> getOrderItemById(int orderItemId) throws Exception {
-        OrderItem order = OrderItemRepository.getOrderItemById(orderItemId);
-        if(order != null) return ResponseEntity.ok().body(order);
+        OrderItem orderItem = OrderItemRepository.getOrderItemById(orderItemId);
+        if(orderItem.getOrderId() != 0) return ResponseEntity.ok().body(orderItem);
         else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/getOrderItemByOrderId")
-    public ResponseEntity<Object> getOrderItemByOrderId(int orderItemId) throws Exception {
-        List<OrderItem> orderList = OrderItemRepository.getOrderItemByOrderId(orderItemId);
+    public ResponseEntity<Object> getOrderItemByOrderId(int orderId) throws Exception {
+        List<OrderItem> orderList = OrderItemRepository.getOrderItemByOrderId(orderId);
         if(orderList.size()>0) return ResponseEntity.ok().body(orderList);
         else return ResponseEntity.badRequest().build();
     }

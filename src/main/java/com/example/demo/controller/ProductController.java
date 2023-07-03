@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping("/getProductById")
     public ResponseEntity<Object> getProductById(@RequestParam int productId) throws Exception {
         Product product = ProductRepository.getProductById(productId);
-        if(product != null) return ResponseEntity.ok().body(product);
+        if(product.getProductId() != 0) return ResponseEntity.ok().body(product);
         else return ResponseEntity.badRequest().build();
     }
 

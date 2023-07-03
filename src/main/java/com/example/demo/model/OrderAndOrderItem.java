@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class OrderAndOrderItem {
     private int orderId;
-    private int userId;
+    private User user;
     private Payment payment;
     private Date orderDate;
     private Delivery delivery;
