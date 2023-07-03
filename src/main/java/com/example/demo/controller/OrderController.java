@@ -45,6 +45,7 @@ public class OrderController {
 
     @PostMapping("/updateOrderStatus")
     public ResponseEntity<Object> updateOrderStatus(@RequestBody Order order) throws Exception {
+        System.out.println(order.toString());
         if(OrderRepository.updateOrderStatus(order)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
