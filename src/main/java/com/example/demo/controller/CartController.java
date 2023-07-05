@@ -41,7 +41,7 @@ public class CartController {
         Cart cart = CartRepository.getCartByUserUid(userUid);
         if (cart.getCartId() != 0) return ResponseEntity.ok().body(cart);
         else return ResponseEntity.badRequest().build();
-    } //Chưa chắc lắm nên tạm để đây
+    }
 
     @PostMapping("/createCart")
     public ResponseEntity<Object> createCart(@RequestBody Cart cart) throws Exception {

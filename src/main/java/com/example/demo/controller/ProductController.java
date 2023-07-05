@@ -63,7 +63,7 @@ public class ProductController {
 
     @DeleteMapping("/deleteProduct")
     public ResponseEntity<Object>  deleteProduct(@RequestParam int[] productId) throws Exception {
-        if(ProductRepository.deleteProduct(productId)) return ResponseEntity.ok().build();
+        if(ProductRepository.deleteProductByChangingStatus(productId)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 

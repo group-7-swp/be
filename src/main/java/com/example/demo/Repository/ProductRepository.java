@@ -54,11 +54,11 @@ public class ProductRepository {
     }
 
     //Chuyển tiếng Việt ko dấu
-    /*public static String unAccent(String s) {
+    public static String unAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replace("đ", "d");
-    }*/
+    }
 
     //Search product by it's name
     public static List<Product> searchByName(String searchValue) throws Exception {
@@ -181,7 +181,7 @@ public class ProductRepository {
                 pst.setInt(2, product.getPrice());
                 pst.setInt(3, product.getQuantity());
                 pst.setInt(4, product.getCategoryId());
-                pst.setString(5, product.getStatus());
+                pst.setString(5, "mới");
                 pst.setString(6, product.getDescription());
                 pst.setString(7, product.getImage());
                 pst.setString(8, dateCreate);
@@ -199,6 +199,27 @@ public class ProductRepository {
     //Delete existing product by id
     public static boolean deleteProduct(int[] productId) throws Exception {
         String sql = "Delete from dbo.Product where productId = ?";
+        try {
+            Connection cn = DBUtils.makeConnection();
+            int count = 0;
+            if (cn != null) {
+                for (int i = 0; i < productId.length; i++) {
+                    PreparedStatement pst = cn.prepareStatement(sql);
+                    pst.setInt(1, productId[i]);
+                    int row = pst.executeUpdate();
+                    if (row > 0) count++;
+                }
+                if (count > 0) return true;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //Delete product by changing product status to "xóa"
+    public static boolean deleteProductByChangingStatus(int[] productId) throws Exception {
+        String sql = "Update dbo.Product set status = N'xóa' where productId = ?";
         try {
             Connection cn = DBUtils.makeConnection();
             int count = 0;
