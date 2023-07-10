@@ -60,8 +60,15 @@ public class OrderController {
 
     @PostMapping("/makeOrder")
     public ResponseEntity<Object> makeOrder(@RequestBody OrderDetails orderDetails) throws Exception {
-        if(OrderDetailsRepository.createOrderDetails(orderDetails)) return ResponseEntity.ok().body("Thành công");
-        else return ResponseEntity.badRequest().body("Đã xa ra lỗi! Vui lòng kiểm tra lại giỏ hàng hoặc thông tin giao hàng.");
+        int orderId = OrderDetailsRepository.createOrderDetails(orderDetails);
+        if(orderId > 0) {
+            String body = EmailRepository.messageCreate(orderId);
+            String subject = "Xác nhận đơn hàng mã:" + orderId;
+            String email = OrderDetailsRepository.getOrderDetailsByOrderId(orderId).getUser().getEmail();
+            EmailRepository.sendEmail(subject, body, email);
+            return ResponseEntity.ok().body(orderId);
+        }
+        else return ResponseEntity.badRequest().body("Đã xa ra lỗi!");
     }
     @GetMapping("/getAllOrderAndOrderItem")
     public ResponseEntity<Object> getOrderAndOrderItem() throws Exception {
