@@ -62,12 +62,12 @@ public class ProductRepository {
 
     //Search product by it's name
     public static List<Product> searchByName(String searchValue) throws Exception {
-        String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
+        /*String sql = "select * from dbo.Product where productName like N'%" + searchValue + "%'";
         List<Product> productList  = getProduct(sql);
-        return productList;
+        return productList;*/
 
         //Search chữ ko dấu
-        /*List<Product> productList = getProduct("select * from dbo.Product");
+        List<Product> productList = getProduct("select * from dbo.Product");
         Product product = new Product();
         List<Product> result = new ArrayList<>();
         for (int i = 0; i < productList.size(); i++){
@@ -76,7 +76,7 @@ public class ProductRepository {
                 result.add(product);
             }
         }
-        return result;*/
+        return result;
     }
 
     //Filter product by id
