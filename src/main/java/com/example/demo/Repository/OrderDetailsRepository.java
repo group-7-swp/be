@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderDetailsRepository {
-    public static boolean createOrderDetails(OrderDetails orderDetails) throws Exception {
+    public static int createOrderDetails(OrderDetails orderDetails) throws Exception {
         try {
             List<CartItems> cartItemsList = orderDetails.getCartItemsList();
 
@@ -23,7 +23,7 @@ public class OrderDetailsRepository {
                 int quantity = cartItems.getQuantity();
                 Product product = ProductRepository.getProductById(productId);
                 int newQuantity = product.getQuantity() - quantity;
-                if (newQuantity < 0) return false;
+                if (newQuantity < 0) return -1;
             }
 
             //create new delivery
@@ -64,11 +64,11 @@ public class OrderDetailsRepository {
                 ProductRepository.updateProduct(product);
             }
             CartItemsRepository.deleteCartItem(cartItemId);//delete cartItems
-            return true;
+            return orderId;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
@@ -252,7 +252,9 @@ public class OrderDetailsRepository {
                 "left join Delivery d on d.deliveryId = o.deliveryId " +
                 "left join OrderStatus os on os.statusId = o.statusId " +
                 "where orderId = " + orderId;
-        OrderAndOrderItem orderAndOrderItem = getOrderDetails(sql).get(0);
+        List<OrderAndOrderItem> orderAndOrderItemList = getOrderDetails(sql);
+        OrderAndOrderItem orderAndOrderItem = new OrderAndOrderItem();
+        if(orderAndOrderItemList.size() > 0) orderAndOrderItem = orderAndOrderItemList.get(0);
         return orderAndOrderItem;
     }
 }
