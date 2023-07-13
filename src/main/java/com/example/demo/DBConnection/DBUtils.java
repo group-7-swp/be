@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DBUtils {
+    /*
     public static Connection makeConnection() throws Exception{
         Connection cn=null;
         String uid="db_a9a498_tiemhommie_admin";
@@ -17,6 +18,23 @@ public class DBUtils {
         cn=DriverManager.getConnection(url);
         return cn;
     }
+    */
+
+    public static Connection makeConnection(){
+        try {
+            String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
+            String url = "jdbc:sqlserver://localhost:1433;databasename=Hommie;instanceName=HIEU;";
+            Class.forName(driver);
+            Connection cn=DriverManager.getConnection(url, "sa", "12345");
+            return cn;
+        } catch(ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getCurrentDate(){
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
