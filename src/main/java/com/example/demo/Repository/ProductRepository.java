@@ -1,16 +1,13 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.Product;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Normalizer;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

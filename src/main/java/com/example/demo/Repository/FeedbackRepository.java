@@ -1,8 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.Feedback;
-import com.example.demo.repository.UserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

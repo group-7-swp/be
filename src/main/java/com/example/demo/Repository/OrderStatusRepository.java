@@ -1,8 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.OrderStatus;
-import com.example.demo.model.Payment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

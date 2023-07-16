@@ -1,10 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
-import com.example.demo.model.Address;
-import com.example.demo.model.Cart;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.User;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

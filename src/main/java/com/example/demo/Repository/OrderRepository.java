@@ -1,19 +1,13 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.*;
 
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Date;
-
-import static com.example.demo.repository.OrderItemRepository.*;
 
 public class OrderRepository {
     public static List<Order> getAllOrder() throws Exception {

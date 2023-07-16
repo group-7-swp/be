@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.*;
 
 import java.sql.Connection;

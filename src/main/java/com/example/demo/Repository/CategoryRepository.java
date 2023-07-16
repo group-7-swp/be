@@ -1,10 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.DBConnection.DBUtils;
+import com.example.demo.dbConnection.DBUtils;
 import com.example.demo.model.Category;
 import com.example.demo.model.CategoryAndProduct;
 import com.example.demo.model.Product;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.*;
 import java.util.ArrayList;
