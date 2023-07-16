@@ -41,4 +41,11 @@ public class FeedbackController {
         if(FeedbackRepository.updateFeedback(feedback)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/allFeedback")
+    public ResponseEntity<Object> getFeedbackByProductId(@RequestParam int productId) throws Exception {
+        List<Feedback> feedbackList = FeedbackRepository.getFeedbackByProductId(productId);
+        if(feedbackList.size()>0) return ResponseEntity.ok().body(feedbackList);
+        else return ResponseEntity.badRequest().build();
+    }
 }

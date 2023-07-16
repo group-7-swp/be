@@ -77,8 +77,11 @@ public class FeedbackRepository {
 
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setInt(1, feedback.getUser().getUserId());
+                System.out.print(feedback.getUser().getUserId());
                 pst.setInt(2, feedback.getProduct().getProductId());
+                System.out.print(feedback.getProduct().getProductId());
                 pst.setString(3, feedback.getContent());
+                System.out.print(feedback.getContent());
                 pst.setString(4, date);
 
                 int row = pst.executeUpdate();
@@ -130,5 +133,32 @@ public class FeedbackRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static List<Feedback> getFeedbackByProductId(int productId) throws Exception {
+        List<Feedback> feedbackList = new ArrayList<>();
+        try {
+            String sql = "select * from dbo.Feedback where productId = ?";
+            Connection cn = DBUtils.makeConnection();
+            if (cn != null) {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, productId);
+                ResultSet table = pst.executeQuery();
+                if (table != null) {
+                    while (table.next()) {
+                        Feedback feedback = new Feedback();
+                        feedback.setFeedbackId(table.getInt("feedbackId"));
+                        feedback.setUser(UserRepository.getUserByUserId(table.getInt("userId")));
+                        feedback.setProduct(ProductRepository.getProductById(table.getInt("productId")));
+                        feedback.setContent(table.getString("content"));
+                        feedback.setDate(table.getDate("date"));
+                        feedbackList.add(feedback);
+                    }
+                }
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return feedbackList;
     }
 }

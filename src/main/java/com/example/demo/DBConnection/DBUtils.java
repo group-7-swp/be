@@ -1,4 +1,4 @@
-package com.example.demo.DBConnection;
+package com.example.demo.dbConnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DBUtils {
-    /*
     public static Connection makeConnection() throws Exception{
         Connection cn=null;
         String uid="db_a9a498_tiemhommie_admin";
@@ -18,9 +17,8 @@ public class DBUtils {
         cn=DriverManager.getConnection(url);
         return cn;
     }
-    */
 
-    public static Connection makeConnection(){
+    /*public static Connection makeConnection(){
         try {
             String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
             String url = "jdbc:sqlserver://localhost:1433;databasename=Hommie;instanceName=HIEU;";
@@ -33,7 +31,7 @@ public class DBUtils {
             ex.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     public static String getCurrentDate(){
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy/MM/dd");
