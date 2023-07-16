@@ -1,14 +1,8 @@
 package com.example.demo.controller;
-import com.example.demo.Repository.CartRepository;
-import com.example.demo.Repository.DeliveryRepository;
-import com.example.demo.Repository.OrderRepository;
-import com.example.demo.model.Cart;
+import com.example.demo.repository.DeliveryRepository;
 import com.example.demo.model.Delivery;
-import com.example.demo.model.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController

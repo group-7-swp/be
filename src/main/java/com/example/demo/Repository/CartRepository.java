@@ -1,4 +1,4 @@
-package com.example.demo.Repository;
+package com.example.demo.repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.*;
@@ -9,8 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.demo.Repository.CartItemsRepository.*;
+import static com.example.demo.repository.CartItemsRepository.*;
 
 public class CartRepository {
     public static List<Cart> getAllCart() throws Exception {

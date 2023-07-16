@@ -1,13 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.AddressRepository;
-import com.example.demo.Repository.DeliveryRepository;
-import com.example.demo.Repository.PaymentRepository;
-import com.example.demo.Repository.UserRepository;
-import com.example.demo.model.Address;
+import com.example.demo.repository.PaymentRepository;
 import com.example.demo.model.Payment;
-import com.example.demo.model.User;
-import net.bytebuddy.asm.Advice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.DeliveryRepository;
-import com.example.demo.Repository.OrderItemRepository;
+import com.example.demo.repository.DeliveryRepository;
+import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.model.OrderItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

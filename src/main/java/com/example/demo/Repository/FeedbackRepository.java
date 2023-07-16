@@ -1,9 +1,8 @@
-package com.example.demo.Repository;
+package com.example.demo.repository;
 
 import com.example.demo.DBConnection.DBUtils;
 import com.example.demo.model.Feedback;
-import org.springframework.http.ResponseEntity;
-
+import com.example.demo.repository.UserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,8 +24,8 @@ public class FeedbackRepository {
                     while (table.next()) {
                         Feedback feedback = new Feedback();
                         feedback.setFeedbackId(table.getInt("feedbackId"));
-                        feedback.setUserId(table.getInt("userId"));
-                        feedback.setProductId(table.getInt("productId"));
+                        feedback.setUser(UserRepository.getUserByUserId(table.getInt("userId")));
+                        feedback.setProduct(ProductRepository.getProductById(table.getInt("productId")));
                         feedback.setContent(table.getString("content"));
                         feedback.setDate(table.getDate("date"));
                         feedbackList.add(feedback);
@@ -52,8 +51,8 @@ public class FeedbackRepository {
                 if (table != null) {
                     while (table.next()) {
                         feedback.setFeedbackId(table.getInt("feedbackId"));
-                        feedback.setUserId(table.getInt("userId"));
-                        feedback.setProductId(table.getInt("productId"));
+                        feedback.setUser(UserRepository.getUserByUserId(table.getInt("userId")));
+                        feedback.setProduct(ProductRepository.getProductById(table.getInt("productId")));
                         feedback.setContent(table.getString("content"));
                         feedback.setDate(table.getDate("date"));
                     }
@@ -77,8 +76,8 @@ public class FeedbackRepository {
                         "SET ANSI_WARNINGS ON";
 
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setInt(1, feedback.getUserId());
-                pst.setInt(2, feedback.getProductId());
+                pst.setInt(1, feedback.getUser().getUserId());
+                pst.setInt(2, feedback.getProduct().getProductId());
                 pst.setString(3, feedback.getContent());
                 pst.setString(4, date);
 

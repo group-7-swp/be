@@ -1,12 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.DBConnection.DBUtils;
-import com.example.demo.Repository.*;
+import com.example.demo.repository.*;
 import com.example.demo.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

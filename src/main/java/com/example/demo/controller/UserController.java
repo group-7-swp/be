@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.AddressRepository;
-import com.example.demo.Repository.CartRepository;
-import com.example.demo.Repository.PaymentRepository;
-import com.example.demo.Repository.UserRepository;
+import com.example.demo.repository.AddressRepository;
+import com.example.demo.repository.CartRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.model.Address;
 import com.example.demo.model.Cart;
 import com.example.demo.model.CreateUser;

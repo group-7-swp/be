@@ -1,14 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.AddressRepository;
-import com.example.demo.Repository.CategoryRepository;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.model.Category;
 import com.example.demo.model.CategoryAndProduct;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.annotation.Retention;
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController

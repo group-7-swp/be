@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.PaymentRepository;
 import com.example.demo.model.Product;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.Repository.ProductRepository;
+import com.example.demo.repository.ProductRepository;
 
 import java.util.List;
 
@@ -35,14 +33,14 @@ public class ProductController {
     }
 
     @GetMapping("/filterByPrice")
-    public ResponseEntity<Object> filterByPrice(@Parameter int from, int to) throws Exception {
+    public ResponseEntity<Object> filterByPrice(@RequestParam int from, int to) throws Exception {
         List<Product> productList = ProductRepository.sortByPrice(from, to);
         if(productList.size()>0) return ResponseEntity.ok().body(productList);
         else return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/filterByStatus")
-    public ResponseEntity<Object> filterByStatus(@Parameter String status) throws Exception {
+    public ResponseEntity<Object> filterByStatus(@RequestParam String status) throws Exception {
         List<Product> productList = ProductRepository.filterByStatus(status);
         if(productList.size()>0) return ResponseEntity.ok().body(productList);
         else return ResponseEntity.badRequest().build();

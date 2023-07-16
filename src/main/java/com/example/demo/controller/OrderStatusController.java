@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.Repository.OrderStatusRepository;
-import com.example.demo.Repository.PaymentRepository;
+import com.example.demo.repository.OrderStatusRepository;
 import com.example.demo.model.OrderStatus;
-import com.example.demo.model.Payment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

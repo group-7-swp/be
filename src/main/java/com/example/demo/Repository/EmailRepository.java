@@ -1,4 +1,4 @@
-package com.example.demo.Repository;
+package com.example.demo.repository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class EmailRepository {
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
         // Load client secrets.
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(com.example.demo.Repository.EmailRepository.class.getResourceAsStream("/client_secret_149572808832-f8smh3quca3tbioou13kldfouaeid7jv.apps.googleusercontent.com.json")));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(com.example.demo.repository.EmailRepository.class.getResourceAsStream("/client_secret_149572808832-f8smh3quca3tbioou13kldfouaeid7jv.apps.googleusercontent.com.json")));
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(

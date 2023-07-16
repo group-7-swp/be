@@ -1,13 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.CartItemsRepository;
-import com.example.demo.Repository.CartRepository;
-import com.example.demo.Repository.UserRepository;
+import com.example.demo.repository.CartRepository;
 import com.example.demo.model.Cart;
 import com.example.demo.model.CartAndCartItem;
-import com.example.demo.model.User;
 import com.example.demo.model.CartAndCartItemAndProduct;
-import com.example.demo.model.ProductAndCartItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

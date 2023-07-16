@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.Repository.AddressRepository;
+import com.example.demo.repository.AddressRepository;
 import com.example.demo.model.Address;
-import io.swagger.v3.oas.annotations.headers.Header;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
