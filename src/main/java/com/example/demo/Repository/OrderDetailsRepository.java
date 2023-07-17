@@ -39,7 +39,7 @@ public class OrderDetailsRepository {
             int deliveryId = delivery.getDeliveryId();
             int statusId = 1;
             String note = orderDetails.getNote();
-            int totalPayment = orderDetails.getTotalPayment();
+            int totalPayment = orderDetails.getTotalPayment() + PaymentRepository.getPaymentById(orderDetails.getPaymentId()).getPaymentCost();
             Order order = new Order(userId, paymentId, deliveryId, statusId, note, totalPayment);
             OrderRepository.createOrder(order);
             List<Order> orderList = OrderRepository.getAllOrder();
