@@ -47,8 +47,8 @@ public class AddressController {
     }
 
     @PatchMapping("/updateAddress")
-    public ResponseEntity<Object> updateAddress(@RequestBody Address adress) throws Exception {
-        if (AddressRepository.updateAddress(adress)) return ResponseEntity.ok().build();
+    public ResponseEntity<Object> updateAddress(@RequestBody Address address) throws Exception {
+        if (AddressRepository.updateAddress(address)) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 }

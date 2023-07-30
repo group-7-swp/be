@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Product;
+import com.example.demo.model.ProductStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.ProductStatusRepository;
 
 import java.util.List;
 
@@ -82,6 +84,13 @@ public class ProductController {
     public ResponseEntity<Object> getProductName() throws Exception {
         String[] productName = ProductRepository.getProductName();
         if(productName != null) return ResponseEntity.ok().body(productName);
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/allProductStatus")
+    public ResponseEntity<Object> getAllProductStatus() throws Exception {
+        List<ProductStatus> productStatusList = ProductStatusRepository.getAllProductStatus();
+        if(productStatusList.size()>0) return ResponseEntity.ok().body(productStatusList);
         else return ResponseEntity.badRequest().build();
     }
 }

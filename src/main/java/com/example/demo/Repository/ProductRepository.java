@@ -29,7 +29,7 @@ public class ProductRepository {
                         product.setPrice(table.getInt("price"));
                         product.setQuantity(table.getInt("quantity"));
                         product.setCategoryId(table.getInt("categoryId"));
-                        product.setStatus(table.getString("status"));
+                        product.setStatus(table.getInt("status"));
                         product.setDescription(table.getString("description"));
                         product.setImage(table.getString("image"));
                         product.setDateCreate(table.getDate("dateCreate"));
@@ -131,7 +131,7 @@ public class ProductRepository {
 
         }
 
-        if (status!=null) sql = sql + " status = N'" + status + "'";
+        if (status!=null) sql = sql + " status =  + status + ";
         int lenght = sql.length();
         if (sql.substring(lenght-5,lenght-1).trim().equals("and")) sql = sql.substring(0, lenght-5);
         List<Product> productList = getProduct(sql);
@@ -178,7 +178,7 @@ public class ProductRepository {
                 pst.setInt(2, product.getPrice());
                 pst.setInt(3, product.getQuantity());
                 pst.setInt(4, product.getCategoryId());
-                pst.setString(5, "mới");
+                pst.setInt(5, 1);
                 pst.setString(6, product.getDescription());
                 pst.setString(7, product.getImage());
                 pst.setString(8, dateCreate);
@@ -216,7 +216,7 @@ public class ProductRepository {
 
     //Delete product by changing product status to "xóa"
     public static boolean deleteProductByChangingStatus(int[] productId) throws Exception {
-        String sql = "Update dbo.Product set status = N'xóa' where productId = ?";
+        String sql = "Update dbo.Product set status = 4 where productId = ?";
         try {
             Connection cn = DBUtils.makeConnection();
             int count = 0;
@@ -239,25 +239,28 @@ public class ProductRepository {
     public static boolean updateProduct(Product product) throws Exception {
         String dateUpdate = DBUtils.getCurrentDate();
         try {
-            String status = product.getStatus();
-            if(product.getQuantity() == 0) status = "hết hàng";
-            else if(status.equalsIgnoreCase("hết hàng")) status = "";
-            Connection cn = DBUtils.makeConnection();
-            if (cn != null) {
-                String sql = "Update dbo.Product set productName = ?, price = ?, quantity = ?, categoryId = ?, status = ?, description = ?, image = ?, dateUpdate = ? where productId = ?";
-                PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, product.getProductName());
-                pst.setInt(2, product.getPrice());
-                pst.setInt(3, product.getQuantity());
-                pst.setInt(4, product.getCategoryId());
-                pst.setString(5, status);
-                pst.setString(6, product.getDescription());
-                pst.setString(7, product.getImage());
-                pst.setString(8, dateUpdate);
-                pst.setInt(9, product.getProductId());
-                int row = pst.executeUpdate();
-                if (row > 0) {
-                    return true;
+            int status = product.getStatus();
+            if(status != 4 && product.getQuantity() == 0){
+                status = 3;
+            }
+            if (status >= 0) {
+                Connection cn = DBUtils.makeConnection();
+                if (cn != null) {
+                    String sql = "Update dbo.Product set productName = ?, price = ?, quantity = ?, categoryId = ?, status = ?, description = ?, image = ?, dateUpdate = ? where productId = ?";
+                    PreparedStatement pst = cn.prepareStatement(sql);
+                    pst.setString(1, product.getProductName());
+                    pst.setInt(2, product.getPrice());
+                    pst.setInt(3, product.getQuantity());
+                    pst.setInt(4, product.getCategoryId());
+                    pst.setInt(5, status);
+                    pst.setString(6, product.getDescription());
+                    pst.setString(7, product.getImage());
+                    pst.setString(8, dateUpdate);
+                    pst.setInt(9, product.getProductId());
+                    int row = pst.executeUpdate();
+                    if (row > 0) {
+                        return true;
+                    }
                 }
             }
         }catch (SQLException e){

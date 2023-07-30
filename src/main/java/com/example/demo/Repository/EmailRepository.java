@@ -31,6 +31,8 @@ import java.util.Set;
 import static com.google.api.services.gmail.GmailScopes.GMAIL_SEND;
 
 public class EmailRepository {
+
+    //lấy thông tin xác thực của người dùng
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
         // Load client secrets.
@@ -43,27 +45,31 @@ public class EmailRepository {
                 .setAccessType("offline")
                 .build();
 
+        //Tạo một LocalServerReceiver để lắng nghe yêu cầu xác thực từ người dùng. Cổng mà máy chủ cục bộ sẽ lắng nghe - 8888.
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        //Trả về đối tượng Credential - được sử dụng để gọi các API của Google ủy quyền bởi người dùng "user".
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
+    //giúp gửi email thông qua dịch vụ Gmail API của Google sử dụng thông tin xác thực được cung cấp.
     public static boolean sendEmail(String subject, String message, String userEmail) throws Exception {
-        NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+        NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport(); //tạo kết nối đến Google API
+        GsonFactory jsonFactory = GsonFactory.getDefaultInstance(); //Tạo GsonFactory để xử lý dữ liệu JSON.
         Gmail service = new Gmail.Builder(httpTransport, jsonFactory, getCredentials(httpTransport, jsonFactory))
                 .setApplicationName("Mail xác nhận đơn hàng")
-                .build();
+                .build(); // Xây dựng đối tượng Gmail API: giao thức HTTP, GsonFactory và thông tin xác thực từ hàm getCredentials.
 
         // Encode as MIME message
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
-        email.setFrom(new InternetAddress("cskh.tiemhommie@gmail.com"));
-        email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(userEmail)); // change send to email address
+        email.setFrom(new InternetAddress("cskh.tiemhommie@gmail.com")); // mail gửi
+        email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(userEmail)); // mail nhận
         email.setSubject(subject);
         email.setContent(message, "text/html; charset=utf-8");
 
         // Encode and wrap the MIME message into a gmail message
+        //Encode và bọc nội dung email đã chuẩn bị thành tin nhắn Gmail theo định dạng Base64URLSafeString.
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         email.writeTo(buffer);
         byte[] rawMessageBytes = buffer.toByteArray();
@@ -97,6 +103,7 @@ public class EmailRepository {
             if(orderAndOrderItem.getOrderId() != 0){
                 List<ProductAndOrderItem> productAndOrderItemList = orderAndOrderItem.getProductAndOrderItemList();
                 String item = "";
+                //tạo table products
                 for (ProductAndOrderItem productAndOrderItem:productAndOrderItemList) {
                     String productAndOrderItemStr =
                             "<tr>" +

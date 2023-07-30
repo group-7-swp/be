@@ -17,7 +17,7 @@ public class Product {
     private int price;
     private int quantity;
     private int categoryId;
-    private String status;
+    private int status;
     private String description;
     private String image;
     private Date dateCreate;

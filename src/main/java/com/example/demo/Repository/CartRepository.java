@@ -179,7 +179,7 @@ public class CartRepository {
                         product.setPrice(table.getInt("price"));
                         product.setQuantity(table.getInt("productQuantity"));
                         product.setCategoryId(table.getInt("categoryId"));
-                        product.setStatus(table.getString("status"));
+                        product.setStatus(table.getInt("status"));
                         product.setDescription(table.getString("description"));
                         product.setImage(table.getString("image"));
                         product.setDateCreate(table.getDate("dateCreate"));
